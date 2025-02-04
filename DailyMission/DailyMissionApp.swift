@@ -25,7 +25,7 @@ struct DailyMissionApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LoginView()
         }
         .modelContainer(sharedModelContainer)
     }
