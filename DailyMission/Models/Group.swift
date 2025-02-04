@@ -14,11 +14,10 @@ final class Group {
     var missionTitle: [String]
     var memberCount: Int
     var category: String // 카테고리 (운동, 공부 등)
-    var members: [String] //그룹원들의 이름 리스트
+    var members: [String]? //그룹원들의 이름 리스트
     var createdAt: Date
     
-    
-    init(name: String, missionTitle: [String], memberCount: Int, category: String, members: [String], _ createdAt: Date) {
+    init(name: String, missionTitle: [String], memberCount: Int, category: String, members: [String], _ createdAt: Date = Date()) {
         self.name = name
         self.missionTitle = missionTitle
         self.memberCount = memberCount
