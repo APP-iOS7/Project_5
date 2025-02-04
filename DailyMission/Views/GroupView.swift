@@ -24,9 +24,6 @@ struct GroupView: View {
                     .font(.largeTitle)
                     .bold()
                     .padding(.bottom, 20)
-                
-                
-
             }
             .padding()
         }
