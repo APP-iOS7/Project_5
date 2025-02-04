@@ -17,6 +17,7 @@ final class Group {
     var members: [String] //그룹원들의 이름 리스트
     var createdAt: Date
     
+    
     init(name: String, missionTitle: [String], memberCount: Int, category: String, members: [String], _ createdAt: Date) {
         self.name = name
         self.missionTitle = missionTitle

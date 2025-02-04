@@ -17,22 +17,18 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("그룹 목록")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.bottom, 20)
 
                 List {
-                    ForEach(groups) { group in
-                        HStack {
-                            Text(group.name)
-                                .foregroundColor(.black)
-                            Text(group.category)
-                                .foregroundColor(.gray)
-                        }
+                    ForEach(groups, id: \.self) { group in
+                        listRow(
+                            name: group.name,
+                            category: group.category
+                        )
                     }
                     .onDelete(perform: deleteGroup)
                 }
+                .listStyle(.plain)
+                .cornerRadius(12)
                 HStack {
                     Spacer()
                     Button(action: { showAddGroup = true }) {
@@ -55,6 +51,26 @@ struct ContentView: View {
     private func deleteGroup(at offsets: IndexSet) {
         for index in offsets {
             modelContext.delete(groups[index])
+        }
+    
+    }
+    private func listRow(name: String, category: String) -> some View {
+        NavigationLink(destination: GroupView()) {
+            HStack {
+                
+                
+                Text(name)
+                    .font(.system(size: 18))
+                    .foregroundColor(.black)
+                
+                Spacer()
+                
+                Text(category)
+                    .foregroundColor(.gray)
+                    .font(.system(size: 16))
+                
+            }
+            .listRowBackground(Color.white)
         }
     }
 }
