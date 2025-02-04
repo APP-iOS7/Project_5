@@ -17,7 +17,7 @@ struct GroupView: View {
     
     @State private var newMissionTitle: String = ""
     @State private var showAddMissionAlert: Bool = false
-
+    @State private var selection = 1
     var body: some View {
         NavigationStack {
             VStack {
@@ -25,14 +25,19 @@ struct GroupView: View {
                     .font(.largeTitle)
                     .bold()
                     .padding(.bottom, 20)
-                TabView {
-                    Tab("calendar", systemImage: "calendar") {
-                        //CalendarView(group: group, month: Date())
-                        }
-                    Tab("calendar", systemImage: "chart.xyaxis.line") {
-                        //CalendarView(group: group)
-                        }
+                TabView(selection: $selection) {
+                    CalenderView(group: group, month: Date())
+                        .tabItem {
+                            Image(systemName: "calendar")
+//                            Text("calendar")
+                        } .tag(1)
+                    CalenderView(group: group, month: Date())
+                        .tabItem {
+                            Image(systemName: "chart.xyaxis.line")
+//                            Text("chart")
+                        } .tag(2)
                 }
+                .accentColor(.green)
             }
             .padding()
         }
@@ -41,8 +46,8 @@ struct GroupView: View {
     
 }
 
-//#Preview {
-//    GroupView(group: Group(name: "sya", missionTitle: ["1","2"], memberCount: 2, category: "study"))
-//        .modelContainer(for: Mission.self, inMemory: true)
-//}
+#Preview {
+    GroupView(group: Group(name: "Ya", missionTitle: ["AA","BB"], memberCount: 3, category: "study", members: ["jin","min","jun"], color: "Black"))
+        .modelContainer(for: Mission.self, inMemory: true)
+}
 

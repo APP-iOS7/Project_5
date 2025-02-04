@@ -167,6 +167,6 @@ extension CalenderView {
   static let weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
 }
 
-#Preview {
-    CalenderView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study"), month: Date())
-}
+//#Preview {
+//    CalenderView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study"), month: Date())
+//}
