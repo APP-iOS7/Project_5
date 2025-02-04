@@ -14,6 +14,16 @@ struct ContentView: View {
 
     @State private var showAddGroup: Bool = false
 
+    let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
+    let colorMap: [String: Color] = [
+        "red": .red,
+        "orange": .orange,
+        "yellow": .yellow,
+        "green": .green,
+        "blue": .blue,
+        "purple": .purple,
+        "brown": .brown
+    ]
     var body: some View {
         NavigationStack {
             VStack {
@@ -21,6 +31,7 @@ struct ContentView: View {
                 List {
                     ForEach(groups, id: \.self) { group in
                         listRow(
+                            color: group.color ?? "blue",
                             name: group.name,
                             category: group.category
                         )
@@ -56,10 +67,15 @@ struct ContentView: View {
         }
     
     }
-    private func listRow(name: String, category: String) -> some View {
-        NavigationLink(destination: GroupView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study", members: []))) {
+    private func listRow(color: String, name: String, category: String) -> some View {
+        NavigationLink(destination: GroupView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study", members: [], color: "blue"))) {
             HStack {
-                
+                Image(systemName: "person.3.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 10)
+                    .foregroundColor(colorMap[color] ?? .blue)
+                    .padding()
                 
                 Text(name)
                     .font(.system(size: 18))
