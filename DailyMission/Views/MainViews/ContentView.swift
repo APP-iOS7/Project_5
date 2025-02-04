@@ -30,11 +30,9 @@ struct ContentView: View {
 
                 List {
                     ForEach(groups, id: \.self) { group in
-                        listRow(
-                            color: group.color ?? "blue",
-                            name: group.name,
-                            category: group.category
-                        )
+                        listRow(color: group.color ?? "blue",
+                                        name: group.name,
+                                        category: group.category)
                     }
                     .onDelete(perform: deleteGroup)
                 }
@@ -68,7 +66,12 @@ struct ContentView: View {
     
     }
     private func listRow(color: String, name: String, category: String) -> some View {
-        NavigationLink(destination: GroupView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study", members: [], color: "blue"))) {
+        NavigationLink(destination: GroupView(group: Group(name: name,
+                                                           missionTitle: [],
+                                                           memberCount: 0,
+                                                           category: category,
+                                                           members: [],
+                                                           color: color))) {
             HStack {
                 Image(systemName: "person.3.fill")
                     .resizable()
