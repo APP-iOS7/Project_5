@@ -27,80 +27,95 @@ struct GroupAppView: View {
     @State private var name: String = ""
     @State private var category: String = ""
     
+    @State private var categoryEnable: Bool = false
+    
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.white.ignoresSafeArea()
-                VStack {
-                    Section {
-                        VStack(alignment: .center) {
-                            Image(systemName: "person.3.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 100)
-                                .foregroundColor(colorMap[selectedColor] ?? .blue)
-                                .padding()
-                            
-                            TextField("이름", text: $name)
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(10)
-                            
-                                .foregroundColor(colorMap[selectedColor] ?? .blue)
+            VStack {
+                VStack(alignment: .center) {
+                    
+                    TextField("이름", text: $name)
+                        .padding()
+                        .overlay(
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundColor(.black),
+                            alignment: .bottom
+                        )
+                    
+                        .foregroundColor(colorMap[selectedColor] ?? .blue)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                    TextField("카테고리", text: $category)
+                        .padding()
+                        .overlay(
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundColor(.black),
+                            alignment: .bottom
+                        )
+                        .foregroundColor(colorMap[selectedColor] ?? .blue)
+                        .font(.headline)
+                    HStack {
+                        Text("색깔 지정")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                        
+                        Spacer()
+                        
+                        Picker(selection: $selectedColor, label: Text("")) {
+                            ForEach(colors, id: \.self) { color in
+                                HStack {
+                                    Circle()
+                                        .fill(colorMap[color] ?? .gray)
+                                        .frame(width: 20, height: 20)
+                                    
+                                    Text(color)
+                                    
+                                }
                                 .font(.headline)
-                                .fontWeight(.bold)
-                                .multilineTextAlignment(.center)
-                            
-                            TextField("카테고리", text: $category)
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(10)
-                                .foregroundColor(colorMap[selectedColor] ?? .blue)
-                                .font(.headline)
-                                .multilineTextAlignment(.center)
-                        }
-                    }
-                    Picker("색상 선택", selection: $selectedColor) {
-                        ForEach(colors, id: \.self) { color in
-                            HStack {
-                                Circle()
-                                    .fill(colorMap[color] ?? .gray)
-                                    .frame(width: 20, height: 20)
-                                
-                                Text(color)
+//                                .frame(
+//                                    maxWidth: .infinity,
+//                                    alignment: .center
+//                                )
+                                .tag(color)
                             }
-                            .tag(color)
                         }
+                        .pickerStyle(NavigationLinkPickerStyle())
+                        .labelsHidden()
+                        
                     }
-                    .pickerStyle(WheelPickerStyle())
-                    Spacer()
+                    .padding()
+                    
                     
                 }
-                .padding()
-                .navigationTitle("그룹 추가")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("취소") {
-                            dismiss()
-                        }
-                        .foregroundColor(.black)
+                
+                Spacer()
+                
+            }
+            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("취소") {
+                        dismiss()
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("추가") {
-                            let group = Group(name: name,
-                                              missionTitle: [],
-                                              memberCount: 0,
-                                              category: category,
-                                              members: [],
-                                              color:selectedColor,
-                                              Date()
-                            )
-                            modelContext.insert(group)
-                            dismiss()
-                        }
-                        .foregroundColor(.black)
+                    .foregroundColor(.black)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("추가") {
+                        let group = Group(name: name,
+                                          missionTitle: [],
+                                          memberCount: 0,
+                                          category: category,
+                                          members: [],
+                                          color:selectedColor,
+                                          Date()
+                        )
+                        modelContext.insert(group)
+                        dismiss()
                     }
+                    .foregroundColor(.black)
                 }
             }
             
