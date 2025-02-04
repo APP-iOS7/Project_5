@@ -31,7 +31,9 @@ struct ContentView: View {
                 .cornerRadius(12)
                 HStack {
                     Spacer()
-                    Button(action: { showAddGroup = true }) {
+                    Button(action: {
+                        showAddGroup = true
+                    }) {
                         Text("목록 추가")
                             .foregroundColor(.black)
                             .font(.headline)
@@ -55,7 +57,7 @@ struct ContentView: View {
     
     }
     private func listRow(name: String, category: String) -> some View {
-        NavigationLink(destination: GroupView()) {
+        NavigationLink(destination: GroupView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study", members: []))) {
             HStack {
                 
                 

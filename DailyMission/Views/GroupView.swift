@@ -10,6 +10,7 @@ import SwiftData
 
 struct GroupView: View {
     @Environment(\.modelContext) private var modelContext
+    var group : Group
     @Query private var missions: [Mission]
     
     @State private var isNavigated: Bool = false
@@ -20,10 +21,18 @@ struct GroupView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("GroupView")
+                Text("\(group.name)")
                     .font(.largeTitle)
                     .bold()
                     .padding(.bottom, 20)
+                TabView {
+                    Tab("calendar", systemImage: "calendar") {
+                        //CalendarView(group: group, month: Date())
+                        }
+                    Tab("calendar", systemImage: "chart.xyaxis.line") {
+                        //CalendarView(group: group)
+                        }
+                }
             }
             .padding()
         }
@@ -33,6 +42,7 @@ struct GroupView: View {
 }
 
 //#Preview {
-//    ContentView()
+//    GroupView(group: Group(name: "sya", missionTitle: ["1","2"], memberCount: 2, category: "study"))
 //        .modelContainer(for: Mission.self, inMemory: true)
 //}
+
