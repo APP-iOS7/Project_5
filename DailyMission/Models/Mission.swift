@@ -11,12 +11,12 @@ import SwiftData
 @Model
 final class Mission {
     var title: String
-//    var isCompleted: Bool
-//    var createdAt: Date
+    //var isCompleted: Bool
+    //var createdAt: Date
     
-    init(title: String/*, isCompleted: Bool, createdAt: Date*/) {
+    init(title: String/*,_ isCompleted: Bool = false,_ createdAt: Date*/) {
         self.title = title
-//        self.isCompleted = isCompleted
-//        self.createdAt = createdAt
+        //self.isCompleted = isCompleted
+        //self.createdAt = createdAt
     }
 }

@@ -11,18 +11,15 @@ import SwiftData
 @main
 struct DailyMissionApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Mission.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(
+                for: Mission.self, Group.self
+            )
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    
     var body: some Scene {
         WindowGroup {
             LoginView()
