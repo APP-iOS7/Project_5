@@ -25,7 +25,7 @@ struct ContentView: View {
                     .padding(.bottom, 20)
                 
                 
-                NavigationLink(destination: GroupView()) {
+                NavigationLink(destination: GroupView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study"))) {
                     Text("이동")
                         .frame(maxWidth: .infinity)
                         .padding()
