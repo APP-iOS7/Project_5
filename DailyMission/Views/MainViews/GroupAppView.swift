@@ -93,6 +93,7 @@ struct GroupAppView: View {
                                               memberCount: 0,
                                               category: category,
                                               members: [],
+                                              color:selectedColor,
                                               Date()
                             )
                             modelContext.insert(group)
