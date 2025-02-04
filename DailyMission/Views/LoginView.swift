@@ -4,7 +4,7 @@
 //
 //  Created by 이민서 on 2/4/25.
 //
-
+//준호님 작성
 import SwiftUI
 import SwiftData
 
@@ -12,62 +12,45 @@ struct LoginView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var missions: [Mission]
     
+    @State private var isNavigated: Bool = false
+    
     @State private var newMissionTitle: String = ""
     @State private var showAddMissionAlert: Bool = false
-
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(missions) { mission in
-                    NavigationLink {
-                        Text("Item at \(mission.title)")
-                    } label: {
-                        Text(mission.title)
-                    }
+        NavigationStack {
+            VStack {
+                Text("LoginView")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.bottom, 20)
+                
+                Button(action: {
+                    isNavigated = true // ✅ 버튼 클릭 시 ContentView로 이동
+                }) {
+                    Text("시작하기")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                .padding()
+                NavigationLink(destination: ContentView()) {
+                    Text("이동")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                ToolbarItem {
-                    Button(action: {
-                        showAddMissionAlert = true
-                    }) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            .alert("새로운 미션 추가", isPresented: $showAddMissionAlert) {
-                TextField("미션 제목을 입력하세요", text: $newMissionTitle)
-                Button("추가", action: addItem)
-                Button("취소", role: .cancel, action: {}) 
-            } message: {
-                Text("미션의 제목을 입력하세요.")
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
 
-    private func addItem() {
-        withAnimation {
-            guard !newMissionTitle.isEmpty else { return } // ✅ 입력값이 비어있지 않은 경우만 추가
-            let newItem = Mission(title: newMissionTitle) // ✅ 입력값 사용
-            modelContext.insert(newItem)
-            newMissionTitle = "" // ✅ 입력 필드 초기화
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(missions[index])
             }
+            .padding()
         }
     }
 }
+
 
 //#Preview {
 //    ContentView()
