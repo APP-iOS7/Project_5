@@ -22,6 +22,9 @@ struct CalenderBodyView: View {
             headerView
             calendarGridView
         }
+        .onAppear(perform: {
+            clickedDate = Date.now
+        })
         .gesture(
             DragGesture()
                 .onChanged { gesture in
@@ -101,11 +104,14 @@ private struct CellView: View {
     var body: some View {
         VStack {
             if clickedDate != nil {
-                if clickedDate != date { NumberView(date: date, colorFore: .gray, colorBack: .clear) }
-                else { NumberView(date: date, colorFore: .red, colorBack: .yellow) }
+                if clickedDate != date && !date.isSameDate(date: Date.now)  {
+                    NumberView(date: date, colorFore: .gray, colorBack: .clear)
+                } else if clickedDate != date && date.isSameDate(date: Date.now) {
+                    NumberView(date: date, colorFore: .gray, colorBack: .gray)
+                }else { NumberView(date: date, colorFore: .red, colorBack: .yellow) }
             } else {
-                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .red, colorBack: .gray) }
-                NumberView(date: date, colorFore: .gray, colorBack: .clear)
+                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray) }
+                else { NumberView(date: date, colorFore: .gray, colorBack: .clear) }
             }
         }
     }
@@ -113,8 +119,8 @@ private struct CellView: View {
 
 private struct NumberView: View {
     var date: Date
-    var colorFore : Color = .blue
-    var colorBack : Color = .clear
+    var colorFore : Color
+    var colorBack : Color
     init(date: Date, colorFore: Color, colorBack: Color) {
         self.date = date
         self.colorFore = colorFore
@@ -122,14 +128,14 @@ private struct NumberView: View {
     }
     var body: some View {
         Circle()
+            .fill(colorBack.opacity(0.2))
+            .frame(width: 25, height: 25)
             .padding(15)
-                .opacity(0)
                 .overlay(Text(date.formatted(
                     Date.FormatStyle()
                         .day()
                 )))
                 .foregroundColor(colorFore)
-                .backgroundStyle(colorBack.opacity(0.2))
     }
 }
 

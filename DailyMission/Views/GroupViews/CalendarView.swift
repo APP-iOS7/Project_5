@@ -19,7 +19,6 @@ struct CalendarView: View {
     }
     
     @State var clickedDate: Date? = Date()
-    
     var body: some View {
             VStack{
                 CalenderBodyView(group: group, month: Date(), clickedDate: $clickedDate)
