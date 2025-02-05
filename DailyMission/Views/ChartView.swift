@@ -12,7 +12,9 @@ struct ChartView: View {
     @Environment(\.modelContext) private var modelContext
     var group : Group
     @Query private var missions: [Mission]
-    
+    var filteredMissions: [Mission] {
+        missions.filter { $0.group?.id == group.id }
+    }
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
@@ -42,7 +44,7 @@ struct ChartView: View {
         VStack(alignment: .leading) {
             
             Text(title)
-                .foregroundColor(.gray)
+                .foregroundColor(.black)
                 .font(.headline)
                 .fontWeight(.bold)
         }
