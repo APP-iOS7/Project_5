@@ -11,7 +11,7 @@ import SwiftData
 struct EditModeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var groups: [Group]
-
+    
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
     let colorMap: [String: Color] = [
         "red": .red,
@@ -25,15 +25,18 @@ struct EditModeView: View {
     let iconSize: CGFloat = 30
     let minusSize: CGFloat = 23
     
+    @State private var showDeleteAlert = false
+    @State private var groupToDelete: Group?
+    
     var body: some View {
         NavigationStack {
             VStack {
-
+                
                 List {
                     ForEach(groups, id: \.self) { group in
                         editRow(color: group.color ?? "blue",
-                                        name: group.name,
-                                        category: group.category,
+                                name: group.name,
+                                category: group.category,
                                 group: group
                         )
                     }
@@ -43,15 +46,27 @@ struct EditModeView: View {
                 
             }
         }
+        .alert("그룹을 나가시겠습니까?", isPresented: $showDeleteAlert) {
+            Button("취소", role: .cancel) { }
+            Button("나가기", role: .destructive) {
+                if let group = groupToDelete {
+                    deleteGroup(group)
+                }
+            }
+        } message: {
+            Text("이 작업은 되돌릴 수 없습니다.")
+        }
     }
     private func deleteGroup(_ group: Group) {
-        modelContext.delete(group) // 직접 Group 객체 삭제
+        modelContext.delete(group)
     }
-
+    
     private func editRow(color: String, name: String, category: String, group: Group) -> some View {
         HStack {
             Button(action: {
-                deleteGroup(group)
+                groupToDelete = group
+                showDeleteAlert = true
+                
             }) {
                 Image(systemName: "minus.circle.fill")
                     .foregroundColor(.red)
