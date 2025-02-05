@@ -37,7 +37,9 @@ struct MainView: View {
                         listButton(color: group.color ?? "blue",
                                         name: group.name,
                                         category: group.category,
-                                   count: group.memberCount)
+                                   count: group.memberCount,
+                                   dueDate: group.dueDate ?? nil
+                        )
                     }
                     .onDelete(perform: deleteGroup)
                 }
@@ -52,7 +54,7 @@ struct MainView: View {
         }
     
     }
-    private func listButton(color: String, name: String, category: String, count: Int) -> some View {
+    private func listButton(color: String, name: String, category: String, count: Int, dueDate: Date?) -> some View {
         NavigationLink(destination: GroupView(group: Group(name: name,
                                                            missionTitle: [],
                                                            memberCount: 0,
@@ -78,9 +80,18 @@ struct MainView: View {
                     .font(.headline)
                     .foregroundColor(.black)
                     .fontWeight(.bold)
-                Text(category)
-                    .foregroundColor(.gray)
-                    .font(.system(size: 16))
+                HStack {
+                    Text(category)
+                        .foregroundColor(.gray)
+                        .font(.system(size: 16))
+                    Spacer()
+                    if let dueDate = dueDate {
+                        Text(calculateDDay(from: dueDate)) // ✅ D-Day 형식으로 출력
+                            .foregroundColor(colorMap[color] ?? .blue)
+                            .font(.system(size: 16))
+                    }
+                }
+                
             }
             .padding()
             .frame(maxWidth: .infinity, minHeight: 80)
@@ -89,6 +100,23 @@ struct MainView: View {
             
         }
     }
+    func calculateDDay(from dueDate: Date) -> String {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date()) // 오늘 날짜 (시간 제외)
+        let targetDate = calendar.startOfDay(for: dueDate) // 목표 날짜 (시간 제외)
+        
+        let components = calendar.dateComponents([.day], from: today, to: targetDate)
+        let daysRemaining = components.day ?? 0
+
+        if daysRemaining > 0 {
+            return "D-\(daysRemaining)" // 미래 날짜
+        } else if daysRemaining == 0 {
+            return "D-day" // 오늘
+        } else {
+            return "D+\(-daysRemaining)" // 지나간 날짜
+        }
+    }
+
 }
 
 //#Preview {

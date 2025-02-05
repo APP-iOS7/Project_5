@@ -27,7 +27,6 @@ struct GroupAddView: View {
     @State private var name: String = ""
     @State private var category: String = ""
     @State private var dueDate: Date?
-    @State private var enableDueDate: Bool = false
     
     @State private var categoryEnable: Bool = false
     
@@ -58,30 +57,27 @@ struct GroupAddView: View {
                         )
                         .foregroundColor(colorMap[selectedColor] ?? .blue)
                         .font(.headline)
-                    HStack {
+                    VStack(alignment: .leading) {
                         
-                        VStack(alignment: .leading, spacing: 0) {
-                            Toggle("날짜", isOn: $enableDueDate)
-                            
-                            
-                            if enableDueDate {
-                                Text(dueDate == nil ? "" : formattedDate(dueDate!))
-                                    .foregroundColor(.blue)
-                                    .font(.footnote)
-                                    .padding(.top, -5)
-                            }
-                        }
-                        .padding(.leading, 10)
-                    }
-                    if enableDueDate {
+                        Text("기간 지정")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                        Text(dueDate == nil ? "" : formattedDate(dueDate!))
+                            .foregroundColor(colorMap[selectedColor] ?? .gray)
+                            .font(.footnote)
                         DatePicker("", selection: Binding(get: {
                             dueDate ?? Date()
                         }, set: { dueDate = $0 }),
                                    displayedComponents: .date)
                         .datePickerStyle(.graphical)
-                        .padding(-10)
                         .labelsHidden()
+                        .tint(colorMap[selectedColor] ?? .gray)
+                        
                     }
+                    .padding()
+                    
+                    
+                    
                     HStack {
                         Text("색깔 지정")
                             .font(.headline)
