@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ChartView: View {
+    
     @Environment(\.modelContext) private var modelContext
     var group : Group
     @Query private var missions: [Mission]
@@ -20,6 +21,12 @@ struct ChartView: View {
         let completedMissions = filteredMissions.filter { $0.isCompleted }.count
         return totalMissions > 0 ? Double(completedMissions) / Double(totalMissions) : 0
     }
+    
+    let members = ["minseo" : "1234", "hajin" : "1234", "junho" : "1234"]
+    @AppStorage("loginMember") var member1: String = "minseo"
+    @AppStorage("loginMember") var member2: String = "hajin"
+    @AppStorage("loginMember") var member3: String = "junho"
+    
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
@@ -38,9 +45,9 @@ struct ChartView: View {
             
             LazyVGrid(columns: columns, spacing: 15) {
                 
-                listButton(title: "양준호", color: group.color ?? "blue", ratio: completedMissionRatio)
-                listButton(title: "최하진", color: group.color ?? "blue", ratio: completedMissionRatio)
-                listButton(title: "이민서", color: group.color ?? "blue", ratio: completedMissionRatio)
+                listButton(title: member1, color: group.color ?? "blue", ratio: completedMissionRatio)
+                listButton(title: member2, color: group.color ?? "blue", ratio: completedMissionRatio)
+                listButton(title: member3, color: group.color ?? "blue", ratio: completedMissionRatio)
             }
             Spacer()
         }
