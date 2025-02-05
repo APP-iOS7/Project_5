@@ -10,14 +10,22 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-
+    @Query private var users: [User]
+    @AppStorage("loginMember") var loggedInUser: String?
+    var userGroups: [Group] {
+        if let user = users.first(where: { $0.id == loggedInUser }) {
+            return user.groups
+        }
+        return []
+    }
+    
     @State private var showAddGroup: Bool = false
     @State private var isEditMode: EditMode = .inactive
-
+    
     var body: some View {
         NavigationStack {
             VStack {
-
+                
                 if isEditMode == .active {
                     EditModeView()
                 } else {
@@ -51,6 +59,15 @@ struct ContentView: View {
                     }
                     
                 }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if let user = loggedInUser {
+                        Text("\(user)님 환영합니다.")
+                    } else {
+                        Text("환영합니다.")
+                    }
+                    
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         withAnimation {
@@ -69,7 +86,7 @@ struct ContentView: View {
             GroupAddView()
         }
     }
-
+    
 }
 
 //#Preview {
