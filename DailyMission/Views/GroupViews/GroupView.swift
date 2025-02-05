@@ -33,11 +33,15 @@ struct GroupView: View {
         "purple": .purple,
         "brown": .brown
     ]
+    
+    
     var body: some View {
+        let groupColor : Color = colorMap[group.color!] ?? .blue
+        
         NavigationStack {
             VStack {
                 TabView(selection: $selection) {
-                    CalendarView(group: group)
+                    CalendarView(group: group, groupColor: groupColor)
                         .tabItem {
                             Image(systemName: "calendar")
                             //                            Text("calendar")
@@ -48,7 +52,7 @@ struct GroupView: View {
                             //                            Text("chart")
                         } .tag(2)
                 }
-                .accentColor(colorMap[group.color!].opacity(0.2) as? Color)
+                .accentColor(groupColor.opacity(0.2))
             }
             .navigationTitle(group.name)
             .onAppear {
@@ -77,8 +81,8 @@ struct GroupView: View {
     }
 }
 
-//#Preview {
-//    GroupView(group: Group(name: "aaa", memberCount: 3, category: "qq", members: ["q","b","c"], color: "ww", dueDate: Date()))
-//        .modelContainer(for: Mission.self, inMemory: true)
-//}
+#Preview {
+    GroupView(group: Group(name: "nna", memberCount: 1, category: "a", members: [User(id: "hajin", password: "1234")], color: "red", dueDate: Date()))
+        .modelContainer(for: Mission.self, inMemory: true)
+}
 

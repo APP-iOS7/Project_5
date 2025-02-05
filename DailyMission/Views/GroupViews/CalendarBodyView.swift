@@ -15,8 +15,9 @@ struct CalenderBodyView: View {
     @State var month: Date
     @State var offset: CGSize = CGSize()
     @Binding var clickedDate: Date?
-    
+    var groupColor: Color
     var body: some View {
+        
         
         VStack {
             headerView
@@ -39,19 +40,41 @@ struct CalenderBodyView: View {
                     self.offset = CGSize()
                 }
         )
+        
     }
     
     // MARK: - 헤더 뷰
     private var headerView: some View {
         VStack {
-            Text(month, formatter: Self.dateFormatter)
-                .font(.title)
-                .padding(.bottom)
-            
+            HStack {
+                Button {
+                    changeMonth(by: -1)
+                } label: {
+                    Image(systemName: "arrowtriangle.left")
+                        .foregroundStyle(groupColor)
+                }
+                Text(month, formatter: Self.dateFormatter)
+                    .font(.body)
+                    .foregroundStyle(groupColor)
+//                    .padding(.bottom)
+                Button {
+                    changeMonth(by: 1)
+                } label: {
+                    Image(systemName: "arrowtriangle.right")
+                        .foregroundStyle(groupColor)
+                }
+            }
+            padding()
             HStack {
                 ForEach(Self.weekdaySymbols, id: \.self) { symbol in
-                    Text(symbol)
-                        .frame(maxWidth: .infinity)
+                    if symbol == "S" {
+                        Text(symbol)
+                            .frame(maxWidth: .infinity)
+                            .foregroundStyle(.red)
+                    } else {
+                        Text(symbol)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
             .padding(.bottom, 10)
@@ -75,7 +98,7 @@ struct CalenderBodyView: View {
 //                        let day = index - firstWeekday + 1
                         let clicked = (clickedDate != nil) ? true : false
                         
-                        CellView(date: date, clicked: clicked, clickedDate: clickedDate)
+                        CellView(date: date, clicked: clicked, clickedDate: clickedDate, groupColor: groupColor)
                             .onTapGesture {
                                 if clickedDate != nil {
                                     clickedDate = (clickedDate == date) ? nil : date
@@ -88,34 +111,38 @@ struct CalenderBodyView: View {
             }
         }
     }
-}
-
-// MARK: - 일자 셀 뷰
-private struct CellView: View {
-    var date: Date
-    var clicked: Bool = false
-    var clickedDate: Date?
-    init(date: Date, clicked: Bool, clickedDate: Date?) {
-        self.date = date
-        self.clicked = clicked
-        self.clickedDate = clickedDate
-    }
     
-    var body: some View {
-        VStack {
-            if clickedDate != nil {
-                if clickedDate != date && !date.isSameDate(date: Date.now)  {
-                    NumberView(date: date, colorFore: .gray, colorBack: .clear)
-                } else if clickedDate != date && date.isSameDate(date: Date.now) {
-                    NumberView(date: date, colorFore: .gray, colorBack: .gray)
-                }else { NumberView(date: date, colorFore: .red, colorBack: .yellow) }
-            } else {
-                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray) }
-                else { NumberView(date: date, colorFore: .gray, colorBack: .clear) }
+    // MARK: - 일자 셀 뷰
+    private struct CellView: View {
+        var date: Date
+        var clicked: Bool = false
+        var clickedDate: Date?
+        var groupColor : Color
+        init(date: Date, clicked: Bool, clickedDate: Date?, groupColor: Color) {
+            self.date = date
+            self.clicked = clicked
+            self.clickedDate = clickedDate
+            self.groupColor = groupColor
+        }
+        
+        var body: some View {
+            VStack {
+                if clickedDate != nil {
+                    if clickedDate != date && !date.isSameDate(date: Date.now)  {
+                        NumberView(date: date, colorFore: .gray, colorBack: .clear)
+                    } else if clickedDate != date && date.isSameDate(date: Date.now) {
+                        NumberView(date: date, colorFore: .gray, colorBack: .gray)
+                    }else { NumberView(date: date, colorFore: groupColor, colorBack: groupColor) }
+                } else {
+                    if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray) }
+                    else { NumberView(date: date, colorFore: .gray, colorBack: .clear) }
+                }
             }
         }
     }
 }
+
+
 
 private struct NumberView: View {
     var date: Date
@@ -128,7 +155,7 @@ private struct NumberView: View {
     }
     var body: some View {
         Circle()
-            .fill(colorBack.opacity(0.2))
+            .fill(colorBack.opacity(0.4))
             .frame(width: 25, height: 25)
             .padding(15)
                 .overlay(Text(date.formatted(
