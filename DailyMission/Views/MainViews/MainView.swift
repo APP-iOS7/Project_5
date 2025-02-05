@@ -12,7 +12,8 @@ struct MainView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [User]
     @AppStorage("loginMember") var loggedInUser: String?
-    var groups: [Group] {
+    @Query private var allgroups: [Group]
+    var usergroups: [Group] {
         guard let user = users.first(where: { $0.id == loggedInUser }) else {
             print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
             return []
@@ -23,9 +24,11 @@ struct MainView: View {
     
     @State private var showAddGroup: Bool = false
     @State private var isEditMode: Bool = false
+    @State private var showGroupInfo: Bool = false
+    @State private var selectedGroup: Group?
     
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
-
+    
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
     let colorMap: [String: Color] = [
         "red": .red,
@@ -40,11 +43,23 @@ struct MainView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(alignment:.leading) {
                 LazyVGrid(columns: columns, spacing: 15) {
-                    ForEach(groups, id: \.self) { group in
-                        listButton(group: group)
-
+                    ForEach(usergroups, id: \.self) { group in
+                        userlistButton(group: group)
+                        
+                    }
+                    .onDelete(perform: deleteGroup)
+                }
+                .padding(.bottom, 20)
+                Text("더 많은 그룹 구경하기")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                LazyVGrid(columns: columns, spacing: 15) {
+                    ForEach(allgroups, id: \.self) { group in
+                        if !usergroups.contains(group) {
+                            otherlistButton(group: group)
+                        }
                     }
                     .onDelete(perform: deleteGroup)
                 }
@@ -52,21 +67,21 @@ struct MainView: View {
             }
         }
     }
-
+    
     private func deleteGroup(at offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(groups[index])
+            modelContext.delete(usergroups[index])
         }
-    
+        
     }
-    private func listButton(group: Group) -> some View {
+    private func userlistButton(group: Group) -> some View {
         NavigationLink(destination: GroupView(group: group)) {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "person.2.fill")
                         .font(.system(size: iconSize))
                         .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
-
+                    
                     
                     Spacer()
                     
@@ -100,6 +115,55 @@ struct MainView: View {
             
         }
     }
+    private func otherlistButton(group: Group) -> some View {
+        Button(action: {
+            selectedGroup = group
+            showGroupInfo = true
+        }) {
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "person.2.fill")
+                        .font(.system(size: iconSize))
+                        .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
+                    
+                    
+                    Spacer()
+                    
+                    Text("\(group.memberCount)")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.black)
+                }
+                Spacer()
+                Text(group.name)
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .fontWeight(.bold)
+                HStack {
+                    Text(group.category)
+                        .foregroundColor(.gray)
+                        .font(.system(size: 16))
+                    Spacer()
+                    if let dueDate = group.dueDate {
+                        Text(calculateDDay(from: dueDate))
+                            .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
+                            .font(.system(size: 16))
+                    }
+                }
+                
+            }
+            .padding()
+            .frame(maxWidth: .infinity, minHeight: 80)
+            .background((colorMap[group.color ?? "blue"] ?? .blue).opacity(0.3))
+            .cornerRadius(12)
+            
+        }
+        .sheet(isPresented: $showGroupInfo) {
+            if let group = selectedGroup {
+                OtherGroupView(group: group)
+            }
+        }
+    }
     func calculateDDay(from dueDate: Date) -> String {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date()) // 오늘 날짜 (시간 제외)
@@ -107,7 +171,7 @@ struct MainView: View {
         
         let components = calendar.dateComponents([.day], from: today, to: targetDate)
         let daysRemaining = components.day ?? 0
-
+        
         if daysRemaining > 0 {
             return "D-\(daysRemaining)" // 미래 날짜
         } else if daysRemaining == 0 {
@@ -116,7 +180,7 @@ struct MainView: View {
             return "D+\(-daysRemaining)" // 지나간 날짜
         }
     }
-
+    
 }
 
 //#Preview {
