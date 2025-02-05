@@ -15,10 +15,10 @@ struct MainView: View {
     @Query private var allgroups: [Group]
     var usergroups: [Group] {
         guard let user = users.first(where: { $0.id == loggedInUser }) else {
-            print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
+            //print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
             return []
         }
-        print("로그인한 사용자: \(user.id), 속한 그룹 개수: \(user.groups.count)")
+        //print("로그인한 사용자: \(user.id), 속한 그룹 개수: \(user.groups.count)")
         return user.groups
     }
     
