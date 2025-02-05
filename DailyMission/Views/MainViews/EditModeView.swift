@@ -12,7 +12,7 @@ struct EditModeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [User]
     @AppStorage("loginMember") var loggedInUser: String?
-    var groups: [Group] {
+    var usergroups: [Group] {
         guard let user = users.first(where: { $0.id == loggedInUser }) else {
             print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
             return []
@@ -40,19 +40,23 @@ struct EditModeView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                
-                List {
-                    ForEach(groups, id: \.self) { group in
-                        editRow(color: group.color ?? "blue",
-                                name: group.name,
-                                category: group.category,
-                                group: group
-                        )
+                if usergroups.isEmpty {
+                    Text("가입한 그룹이 없습니다.")
+                        .foregroundColor(.gray)
+                        .font(.title3)
+                } else {
+                    VStack {
+                        List {
+                            ForEach(usergroups, id: \.self) { group in
+                                editRow(group: group)
+                                
+                            }
+                        }
+                        .listStyle(.plain)
+                        .cornerRadius(12)
                     }
+                    
                 }
-                .listStyle(.plain)
-                .cornerRadius(12)
-                
             }
         }
         .alert("그룹을 나가시겠습니까?", isPresented: $showDeleteAlert) {
@@ -71,8 +75,9 @@ struct EditModeView: View {
         modelContext.delete(group)
     }
     
-    private func editRow(color: String, name: String, category: String, group: Group) -> some View {
-        HStack {
+    private func editRow(group: Group) -> some View {
+        print("editRow 실행: \(group.name)")
+        return HStack {
             Button(action: {
                 groupToDelete = group
                 showDeleteAlert = true
@@ -89,10 +94,10 @@ struct EditModeView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: iconSize)
-                .foregroundColor(colorMap[color] ?? .blue)
+                .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
                 .padding()
             
-            Text(name)
+            Text(group.name)
                 .font(.system(size: 18))
                 .foregroundColor(.black)
             
