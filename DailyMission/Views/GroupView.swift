@@ -26,12 +26,12 @@ struct GroupView: View {
                     .bold()
                     .padding(.bottom, 20)
                 TabView(selection: $selection) {
-                    CalenderView(group: group, month: Date())
+                    CalenderView(group: group)
                         .tabItem {
                             Image(systemName: "calendar")
 //                            Text("calendar")
                         } .tag(1)
-                    CalenderView(group: group, month: Date())
+                    CalenderView(group: group)
                         .tabItem {
                             Image(systemName: "chart.xyaxis.line")
 //                            Text("chart")
@@ -42,8 +42,6 @@ struct GroupView: View {
             .padding()
         }
     }
-
-    
 }
 
 #Preview {
