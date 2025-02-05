@@ -26,6 +26,8 @@ struct GroupAddView: View {
     ]
     @State private var name: String = ""
     @State private var category: String = ""
+    @State private var dueDate: Date?
+    @State private var enableDueDate: Bool = false
     
     @State private var categoryEnable: Bool = false
     
@@ -57,6 +59,30 @@ struct GroupAddView: View {
                         .foregroundColor(colorMap[selectedColor] ?? .blue)
                         .font(.headline)
                     HStack {
+                        
+                        VStack(alignment: .leading, spacing: 0) {
+                            Toggle("날짜", isOn: $enableDueDate)
+                            
+                            
+                            if enableDueDate {
+                                Text(dueDate == nil ? "" : formattedDate(dueDate!))
+                                    .foregroundColor(.blue)
+                                    .font(.footnote)
+                                    .padding(.top, -5)
+                            }
+                        }
+                        .padding(.leading, 10)
+                    }
+                    if enableDueDate {
+                        DatePicker("", selection: Binding(get: {
+                            dueDate ?? Date()
+                        }, set: { dueDate = $0 }),
+                                   displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                        .padding(-10)
+                        .labelsHidden()
+                    }
+                    HStack {
                         Text("색깔 지정")
                             .font(.headline)
                             .foregroundColor(.gray)
@@ -74,10 +100,6 @@ struct GroupAddView: View {
                                     
                                 }
                                 .font(.headline)
-//                                .frame(
-//                                    maxWidth: .infinity,
-//                                    alignment: .center
-//                                )
                                 .tag(color)
                             }
                         }
@@ -110,6 +132,7 @@ struct GroupAddView: View {
                                           category: category,
                                           members: [],
                                           color:selectedColor,
+                                          dueDate: dueDate,
                                           Date()
                         )
                         modelContext.insert(group)
@@ -120,6 +143,12 @@ struct GroupAddView: View {
             }
             
         }
+    }
+    func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy년 M월 d일 E요일"
+        return formatter.string(from: date)
     }
 }
 
