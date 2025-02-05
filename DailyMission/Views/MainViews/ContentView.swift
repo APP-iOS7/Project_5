@@ -32,16 +32,8 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     HStack {
-                        Button(action: {
-                            withAnimation {
-                                isEditMode = isEditMode == .active ? .inactive : .active
-                            }
-                        }) {
-                            Text(isEditMode == .active ? "완료" : "편집")
-                                .foregroundColor(.black)
-                                .font(.headline)
-                        }
-                        Spacer()
+                        
+                        
                         Button(action: {
                             showAddGroup = true
                         }) {
@@ -49,21 +41,25 @@ struct ContentView: View {
                                 .foregroundColor(.black)
                                 .font(.headline)
                         }
+                        Spacer()
+                        Button(action: {
+                        }) {
+                            Label("로그아웃", systemImage: "rectangle.portrait.and.arrow.right")
+                                .foregroundColor(.black)
+                                .font(.headline)
+                        }
                     }
                     
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        
-                        
-                        Button(action: {
-                        }) {
-                            Label("로그아웃", systemImage: "rectangle.portrait.and.arrow.right")
+                    Button(action: {
+                        withAnimation {
+                            isEditMode = isEditMode == .active ? .inactive : .active
                         }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                            .imageScale(.large)
+                    }) {
+                        Text(isEditMode == .active ? "완료" : "편집")
                             .foregroundColor(.black)
+                            .font(.headline)
                     }
                     
                 }
