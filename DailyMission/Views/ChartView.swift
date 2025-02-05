@@ -13,8 +13,43 @@ struct ChartView: View {
     var group : Group
     @Query private var missions: [Mission]
     
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    
+    let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
+    let colorMap: [String: Color] = [
+        "red": .red,
+        "orange": .orange,
+        "yellow": .yellow,
+        "green": .green,
+        "blue": .blue,
+        "purple": .purple,
+        "brown": .brown
+    ]
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            LazyVGrid(columns: columns, spacing: 15) {
+                
+                listButton(title: "양준호", color: group.color ?? "blue")
+                listButton(title: "최하진", color: group.color ?? "blue")
+                listButton(title: "이민서", color: group.color ?? "blue")
+            }
+            Spacer()
+        }
+        
+    }
+    private func listButton(title: String, color: String) -> some View {
+        VStack(alignment: .leading) {
+            
+            Text(title)
+                .foregroundColor(.gray)
+                .font(.headline)
+                .fontWeight(.bold)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, minHeight: 80)
+        .background((colorMap[color] ?? .blue).opacity(0.3))
+        .cornerRadius(12)
     }
 }
 
