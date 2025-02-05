@@ -10,6 +10,9 @@ import SwiftData
 
 @main
 struct DailyMissionApp: App {
+    
+    @AppStorage("loginMember") var loginMember: String?
+    
     var sharedModelContainer: ModelContainer = {
         do {
             return try ModelContainer(
@@ -22,7 +25,11 @@ struct DailyMissionApp: App {
     
     var body: some Scene {
         WindowGroup {
-            IntroView()
+            if let member = loginMember {
+                ContentView()
+            } else {
+                IntroView()
+            }
         }
         .modelContainer(PreviewContainer.shared.container)
     }
