@@ -18,6 +18,7 @@ struct CalenderView: View {
         missions.filter { $0.group?.id == group.id }
     }
     
+    
     @State var clickedDate: Date? = Date()
     
     var body: some View {
@@ -26,7 +27,6 @@ struct CalenderView: View {
             
             List {
                 ForEach(filteredMissions) { mission in
-                    if mission.group == group {
                         HStack{
                             Text("\(mission.title)")
                             Spacer()
@@ -34,12 +34,12 @@ struct CalenderView: View {
                                 .onTapGesture {
                                     mission.isCompleted.toggle()
                                 }
-                        }
+                        
                     }
                 }
             }
             .scrollContentBackground(.hidden)
-            .
+            
         }
     }
 }
