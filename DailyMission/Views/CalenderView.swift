@@ -25,6 +25,7 @@ struct CalenderView: View {
               ForEach(missions) { mission in
                   HStack{
                       Text("\(mission.title)")
+                      Spacer()
                       Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
                           .onTapGesture {
                               mission.isCompleted.toggle()
@@ -32,6 +33,7 @@ struct CalenderView: View {
                   }
               }
           }
+          .scrollContentBackground(.hidden)
       }
   }
 }

@@ -67,7 +67,6 @@ struct CalenderBodyView: View {
                     if index < firstWeekday {
                         RoundedRectangle(cornerRadius: 5)
                             .padding(15)
-//                            .frame(width: 10, height: 10)
                             .foregroundColor(Color.clear)
                     } else {
                         let date = getDate(for: index - firstWeekday)

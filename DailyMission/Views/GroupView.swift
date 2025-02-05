@@ -10,6 +10,8 @@ import SwiftData
 
 struct GroupView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
     var group : Group
     @Query private var missions: [Mission]
     
@@ -47,13 +49,19 @@ struct GroupView: View {
                 }) {
                     Image(systemName: "plus")
                 }
-//                .sheet(isPresented: $isShowingNewMission, onDismiss: didDismiss)
+                .sheet(isPresented: $isShowingNewMission, onDismiss: didDismiss) {
+                    AddNewMissionView(group: group)
+                }
             }
             
             .padding()
         }
         
     }
+    
+    func didDismiss() {
+        dismiss()
+        }
 }
 
 //#Preview {
