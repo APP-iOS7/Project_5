@@ -10,7 +10,7 @@ import SwiftData
 
 
 
-struct CalenderView: View {
+struct CalendarView: View {
     @Environment(\.modelContext) private var modelContext
     var group : Group
     @Query private var missions: [Mission]
@@ -26,7 +26,7 @@ struct CalenderView: View {
                 List {
                     Section(content: {
                         ForEach(filteredMissions) { mission in
-                            if let clickedDate = clickedDate, let index = mission.dateStamp?.firstIndex(where: { $0.date.formatted(Date.FormatStyle().year().month().day()) == clickedDate.formatted(Date.FormatStyle().year().month().day()) }) {
+                            if let clickedDate = clickedDate, let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
                                 HStack{
                                     Text("\(mission.title)")
                                     Spacer()
@@ -46,8 +46,6 @@ struct CalenderView: View {
             }
     }
 }
-
-
 
 //#Preview {
 //    CalenderView(group: Group(name: "ya", missionTitle: ["1","2"], memberCount: 2, category: "study"), month: Date())

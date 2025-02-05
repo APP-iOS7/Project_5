@@ -14,7 +14,9 @@ struct GroupView: View {
     
     var group : Group
     @Query private var missions: [Mission]
-    
+    var filteredMissions: [Mission] {
+        missions.filter { $0.group?.id == group.id }
+    }
     
     @State private var selection = 1
     @State private var newMissionTitle: String = ""
@@ -35,7 +37,7 @@ struct GroupView: View {
         NavigationStack {
             VStack {
                 TabView(selection: $selection) {
-                    CalenderView(group: group)
+                    CalendarView(group: group)
                         .tabItem {
                             Image(systemName: "calendar")
                             //                            Text("calendar")
@@ -48,8 +50,10 @@ struct GroupView: View {
                 }
                 .accentColor(colorMap[group.color!].opacity(0.2) as? Color)
             }
-            
             .navigationTitle(group.name)
+            .onAppear {
+                MakeDailyTimeStamp(missions: filteredMissions)
+            }
             .toolbar {
                 Button(action: {
                     isShowingNewMission.toggle()
@@ -60,11 +64,16 @@ struct GroupView: View {
                     AddNewMissionView(group: group)
                 }
             }
-            
-            
             .padding()
         }
-        
+    }
+    
+    private func MakeDailyTimeStamp(missions: [Mission]) {
+        for mission in missions {
+            if ((mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: Date.now) })) == nil) {
+                mission.dateStamp?.append(DateStamp(date: Date.now, isCompleted: false))
+            }
+        }
     }
 }
 

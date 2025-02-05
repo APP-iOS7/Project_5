@@ -8,8 +8,6 @@
 import SwiftUI
 import SwiftData
 
-
-
 struct CalenderBodyView: View {
     @Environment(\.modelContext) private var modelContext
     var group : Group
@@ -103,10 +101,11 @@ private struct CellView: View {
     var body: some View {
         VStack {
             if clickedDate != nil {
-                if clickedDate != date { NumberView(date: date, color: .gray) }
-                else { NumberView(date: date, color: .red) }
+                if clickedDate != date { NumberView(date: date, colorFore: .gray, colorBack: .clear) }
+                else { NumberView(date: date, colorFore: .red, colorBack: .yellow) }
             } else {
-                NumberView(date: date, color: .gray)
+                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .red, colorBack: .gray) }
+                NumberView(date: date, colorFore: .gray, colorBack: .clear)
             }
         }
     }
@@ -114,25 +113,30 @@ private struct CellView: View {
 
 private struct NumberView: View {
     var date: Date
-    var color : Color = .blue
-    init(date: Date, color: Color) {
+    var colorFore : Color = .blue
+    var colorBack : Color = .clear
+    init(date: Date, colorFore: Color, colorBack: Color) {
         self.date = date
-        self.color = color
+        self.colorFore = colorFore
+        self.colorBack = colorBack
     }
     var body: some View {
-            RoundedRectangle(cornerRadius: 5)
+        Circle()
             .padding(15)
                 .opacity(0)
                 .overlay(Text(date.formatted(
                     Date.FormatStyle()
                         .day()
                 )))
-                .foregroundColor(color)
+                .foregroundColor(colorFore)
+                .backgroundStyle(colorBack.opacity(0.2))
     }
 }
 
 // MARK: - 내부 메서드
 private extension CalenderBodyView {
+    
+    
     /// 특정 해당 날짜
     private func getDate(for day: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: day, to: startOfMonth())!
@@ -175,6 +179,16 @@ extension CalenderBodyView {
     }()
     
     static let weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
+}
+
+extension Date {
+    private func startOfDay() -> Date {
+        Calendar.current.startOfDay(for: self)
+    }
+    
+    func isSameDate(date: Date) -> Bool {
+        self.startOfDay() == date.startOfDay()
+    }
 }
 
 //#Preview {
