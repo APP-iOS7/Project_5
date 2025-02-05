@@ -19,6 +19,7 @@ struct CalenderBodyView: View {
     @Binding var clickedDate: Date?
     
     var body: some View {
+        
         VStack {
             headerView
             calendarGridView
