@@ -38,7 +38,7 @@ struct AddNewMissionView: View {
                 ToolbarItem(placement: .topBarTrailing){
                     Button("등록"){
                         let newMission = Mission(title: title, group: group)
-                        newMission.dateStamp?.append(DateStamp(date: Date.now, isCompleted: false))
+                        group.missionTitle?.append(newMission)
                         modelContext.insert(newMission)
                         dismiss()
                     }
