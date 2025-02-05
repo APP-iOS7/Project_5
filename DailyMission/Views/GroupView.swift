@@ -24,10 +24,7 @@ struct GroupView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("\(group.name)")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.bottom, 20)
+
                 TabView(selection: $selection) {
                     
                     CalenderView(group: group)
@@ -43,6 +40,7 @@ struct GroupView: View {
                 }
                 .accentColor(.green)
             }
+            .navigationTitle(group.name)
             .toolbar {
                 Button(action: {
                     isShowingNewMission.toggle()
@@ -65,7 +63,7 @@ struct GroupView: View {
 }
 
 //#Preview {
-//    GroupView(group: Group(name: "Ya", missionTitle: ["AA","BB"], memberCount: 3, category: "study", members: ["jin","min","jun"], color: "Black"))
+//    GroupView(group: Group(name: "aaa", memberCount: 3, category: "qq", members: ["q","b","c"], color: "ww", dueDate: Date()))
 //        .modelContainer(for: Mission.self, inMemory: true)
 //}
-
+//

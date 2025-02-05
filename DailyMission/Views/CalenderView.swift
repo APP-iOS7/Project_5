@@ -26,17 +26,20 @@ struct CalenderView: View {
             
             List {
                 ForEach(filteredMissions) { mission in
-                    HStack{
-                        Text("\(mission.title)")
-                        Spacer()
-                        Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
-                            .onTapGesture {
-                                mission.isCompleted.toggle()
-                            }
+                    if mission.group == group {
+                        HStack{
+                            Text("\(mission.title)")
+                            Spacer()
+                            Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
+                                .onTapGesture {
+                                    mission.isCompleted.toggle()
+                                }
+                        }
                     }
                 }
             }
             .scrollContentBackground(.hidden)
+            .
         }
     }
 }
