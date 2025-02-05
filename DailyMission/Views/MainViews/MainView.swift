@@ -58,7 +58,8 @@ struct MainView: View {
                                                            memberCount: 0,
                                                            category: category,
                                                            members: [],
-                                                           color: color))) {
+                                                           color: color,
+                                                           dueDate: nil))) {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "person.2.fill")

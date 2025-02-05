@@ -71,8 +71,6 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showAddGroup) {
             GroupAddView()
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
         }
     }
 
