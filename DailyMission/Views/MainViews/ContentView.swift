@@ -54,24 +54,11 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button(action: {
-                        }) {
-                            Label("우땨땨", systemImage: "info.circle")
-                        }
+                        
                         
                         Button(action: {
                         }) {
-                            Label("우땨땨", systemImage: "info.circle")
-                        }
-                        
-                        Button(action: {
-                        }) {
-                            Label("우땨땨", systemImage: "info.circle")
-                        }
-                        
-                        Button(action: {
-                        }) {
-                            Label("우땨땨", systemImage: "info.circle")
+                            Label("로그아웃", systemImage: "rectangle.portrait.and.arrow.right")
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
