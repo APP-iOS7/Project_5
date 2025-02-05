@@ -21,7 +21,7 @@ struct CalendarView: View {
     @State var clickedDate: Date? = Date()
     var body: some View {
             VStack{
-                CalenderBodyView(group: group, groupColor: groupColor, month: Date(), clickedDate: $clickedDate)
+                CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissions, clickedDate: $clickedDate)
                 List {
                     Section(content: {
                         ForEach(filteredMissions) { mission in
