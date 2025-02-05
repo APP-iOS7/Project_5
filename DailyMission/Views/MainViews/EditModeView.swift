@@ -22,17 +22,21 @@ struct EditModeView: View {
         "purple": .purple,
         "brown": .brown
     ]
+    let iconSize: CGFloat = 30
+    let minusSize: CGFloat = 23
+    
     var body: some View {
         NavigationStack {
             VStack {
 
                 List {
                     ForEach(groups, id: \.self) { group in
-                        listRowEditMode(color: group.color ?? "blue",
+                        editRow(color: group.color ?? "blue",
                                         name: group.name,
-                                        category: group.category)
+                                        category: group.category,
+                                group: group
+                        )
                     }
-                    .onDelete(perform: deleteGroup)
                 }
                 .listStyle(.plain)
                 .cornerRadius(12)
@@ -40,41 +44,38 @@ struct EditModeView: View {
             }
         }
     }
-
-    private func deleteGroup(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(groups[index])
-        }
-    
+    private func deleteGroup(_ group: Group) {
+        modelContext.delete(group) // 직접 Group 객체 삭제
     }
-    private func listRowEditMode(color: String, name: String, category: String) -> some View {
-        NavigationLink(destination: GroupView(group: Group(name: name,
-                                                           missionTitle: [],
-                                                           memberCount: 0,
-                                                           category: category,
-                                                           members: [],
-                                                           color: color))) {
-            HStack {
-                Image(systemName: "person.2.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 10)
-                    .foregroundColor(colorMap[color] ?? .blue)
-                    .padding()
-                
-                Text(name)
-                    .font(.system(size: 18))
-                    .foregroundColor(.black)
-                
-                Spacer()
-                
-                Text(category)
-                    .foregroundColor(.gray)
-                    .font(.system(size: 16))
-                
+
+    private func editRow(color: String, name: String, category: String, group: Group) -> some View {
+        HStack {
+            Button(action: {
+                deleteGroup(group)
+            }) {
+                Image(systemName: "minus.circle.fill")
+                    .foregroundColor(.red)
+                    .font(.system(size: minusSize))
             }
-            .listRowBackground(Color.white)
+            .buttonStyle(PlainButtonStyle())
+            .contentShape(Rectangle())
+            
+            Image(systemName: "person.2.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: iconSize)
+                .foregroundColor(colorMap[color] ?? .blue)
+                .padding()
+            
+            Text(name)
+                .font(.system(size: 18))
+                .foregroundColor(.black)
+            
+            Spacer()
+            
+            
         }
+        .listRowBackground(Color.white)
     }
 }
 
