@@ -20,7 +20,7 @@ class PreviewContainer {
             User.self, Group.self, Mission.self, DateStamp.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema,
-                                                    isStoredInMemoryOnly: true,
+                                                    isStoredInMemoryOnly: false,
                                                     cloudKitDatabase: .none)
         
         do {
