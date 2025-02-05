@@ -30,10 +30,10 @@ struct CalenderView: View {
                         HStack{
                             Text("\(mission.title)")
                             Spacer()
-                            Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
-                                .onTapGesture {
-                                    mission.isCompleted.toggle()
-                                }
+//                            Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
+//                                .onTapGesture {
+//                                    mission.isCompleted.toggle()
+//                                }
                         
                     }
                 }
