@@ -75,14 +75,17 @@ struct LoginView: View {
         }
     }
     private func login() {
-        if let password = members[userId], password == self.password {
-            loggedInUser = User(id: userId, password: password)
+        if let storedPassword = members[userId], storedPassword == password {
+            loggedInUser = User(id: userId, password: storedPassword)
             member = userId
             isLoggedIn = true
+            userId = ""
+            password = ""
         } else {
             print("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.")
         }
     }
+
 }
 
 

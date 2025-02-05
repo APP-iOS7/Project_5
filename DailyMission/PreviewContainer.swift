@@ -34,10 +34,11 @@ class PreviewContainer {
     func insertPreviewData() {
         let today = Date()
         let users: [User] = [
-            User(id: "minseo", password: "1234"),
-            User(id: "hajin", password: "1234"),
-            User(id: "junho", password: "1234")
-        ]
+                User(id: "minseo", password: "1234"),
+                User(id: "hajin", password: "1234"),
+                User(id: "junho", password: "1234")
+            ]
+
         for user in users {
             container.mainContext.insert(user)
         }
@@ -62,9 +63,9 @@ class PreviewContainer {
                     ),
                     Group(
                         name: "여행 계획",
-                        memberCount: [users[1], users[2]].count,
+                        memberCount: [users[0], users[2]].count,
                         category: "여행",
-                        members: [users[1], users[2]],
+                        members: [users[0], users[2]],
                         color: "green",
                         dueDate: calendar.date(byAdding: .day, value: 14, to: today)
                     )
@@ -73,6 +74,9 @@ class PreviewContainer {
         for group in groups {
             container.mainContext.insert(group)
         }
+        users[0].groups = [groups[1], groups[2]]
+        users[1].groups = [groups[0], groups[1]]
+        users[2].groups = [groups[0], groups[2]]
         
         let missions: [(String, Group?, [DateStamp])] = [
             ("Swift 공부하기", groups[0], [DateStamp(date: today, isCompleted: true)]),

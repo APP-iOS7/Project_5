@@ -10,6 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Query private var users: [User]
     @AppStorage("loginMember") var loggedInUser: String?
     var userGroups: [Group] {
@@ -51,6 +52,8 @@ struct ContentView: View {
                         }
                         Spacer()
                         Button(action: {
+                            loggedInUser = nil
+                            dismiss()
                         }) {
                             Label("로그아웃", systemImage: "rectangle.portrait.and.arrow.right")
                                 .foregroundColor(.black)
@@ -61,7 +64,7 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     if let user = loggedInUser {
-                        Text("\(user)님 환영합니다.")
+                        Text("\(user) 님 환영합니다.")
                     } else {
                         Text("환영합니다.")
                     }

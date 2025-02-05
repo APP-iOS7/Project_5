@@ -10,7 +10,16 @@ import SwiftData
 
 struct MainView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var groups: [Group]
+    @Query private var users: [User]
+    @AppStorage("loginMember") var loggedInUser: String?
+    var groups: [Group] {
+        guard let user = users.first(where: { $0.id == loggedInUser }) else {
+            print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
+            return []
+        }
+        print("로그인한 사용자: \(user.id), 속한 그룹 개수: \(user.groups.count)")
+        return user.groups
+    }
     
     @State private var showAddGroup: Bool = false
     @State private var isEditMode: Bool = false
@@ -35,8 +44,6 @@ struct MainView: View {
                 LazyVGrid(columns: columns, spacing: 15) {
                     ForEach(groups, id: \.self) { group in
                         listButton(group: group)
-                        
-                        //.shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
 
                     }
                     .onDelete(perform: deleteGroup)
