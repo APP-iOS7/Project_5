@@ -16,11 +16,11 @@ struct ChartView: View {
     var filteredMissions: [Mission] {
         missions.filter { $0.group?.id == group.id }
     }
-    var completedMissionRatio: Double {
-        let totalMissions = filteredMissions.count
-        let completedMissions = filteredMissions.filter { $0.isCompleted }.count
-        return totalMissions > 0 ? Double(completedMissions) / Double(totalMissions) : 0
-    }
+//    var completedMissionRatio: Double {
+//        let totalMissions = filteredMissions.count
+//        let completedMissions = filteredMissions.filter { $0.isCompleted }.count
+//        return totalMissions > 0 ? Double(completedMissions) / Double(totalMissions) : 0
+//    }
     
     let members = ["minseo" : "1234", "hajin" : "1234", "junho" : "1234"]
     @AppStorage("loginMember") var member1: String = "minseo"
@@ -45,9 +45,9 @@ struct ChartView: View {
             
             LazyVGrid(columns: columns, spacing: 15) {
                 
-                listButton(title: member1, color: group.color ?? "blue", ratio: completedMissionRatio)
-                listButton(title: member2, color: group.color ?? "blue", ratio: completedMissionRatio)
-                listButton(title: member3, color: group.color ?? "blue", ratio: completedMissionRatio)
+//                listButton(title: member1, color: group.color ?? "blue", ratio: completedMissionRatio)
+//                listButton(title: member2, color: group.color ?? "blue", ratio: completedMissionRatio)
+//                listButton(title: member3, color: group.color ?? "blue", ratio: completedMissionRatio)
             }
             Spacer()
         }
