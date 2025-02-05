@@ -37,7 +37,7 @@ struct AddNewMissionView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing){
                     Button("등록"){
-                        let newMission = Mission(title: title)
+                        let newMission = Mission(title: title, group: group)
                         modelContext.insert(newMission)
                         dismiss()
                     }
@@ -47,6 +47,6 @@ struct AddNewMissionView: View {
     }
 }
 
-#Preview {
-    AddNewMissionView(group: Group(name: "Ya", missionTitle: ["AA","BB"], memberCount: 3, category: "study", members: ["jin","min","jun"], color: "Black"))
-}
+//#Preview {
+//    AddNewMissionView(group: Group(name: "Ya", missionTitle: ["AA","BB"], memberCount: 3, category: "study", members: ["jin","min","jun"], color: "Black"))
+//}

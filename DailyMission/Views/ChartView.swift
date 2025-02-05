@@ -16,10 +16,10 @@ struct ChartView: View {
         missions.filter { $0.group?.id == group.id }
     }
     var completedMissionRatio: Double {
-            let totalMissions = filteredMissions.count
-            let completedMissions = filteredMissions.filter { $0.isCompleted }.count
-            return totalMissions > 0 ? Double(completedMissions) / Double(totalMissions) : 0
-        }
+        let totalMissions = filteredMissions.count
+        let completedMissions = filteredMissions.filter { $0.isCompleted }.count
+        return totalMissions > 0 ? Double(completedMissions) / Double(totalMissions) : 0
+    }
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
@@ -47,13 +47,27 @@ struct ChartView: View {
         
     }
     private func listButton(title: String, color: String, ratio: Double) -> some View {
-        VStack(alignment: .leading) {
+        HStack(alignment: .top) {
             
             Text(title)
                 .foregroundColor(.black)
                 .font(.headline)
                 .fontWeight(.bold)
-            Text("완료된 미션 비율: \(ratio * 100, specifier: "%.1f")%")
+            Spacer()
+            ZStack {
+                Circle()
+                    .trim(from: 0, to: 1)
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 20)
+                
+                Circle()
+                    .trim(from: 0, to: CGFloat(ratio))
+                    .stroke(colorMap[color] ?? .blue, lineWidth: 20)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeInOut(duration: 1.0), value: ratio)
+                
+            }
+            .padding()
+            .frame(width: 70, height: 70)
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 80)

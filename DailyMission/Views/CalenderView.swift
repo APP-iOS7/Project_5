@@ -14,28 +14,31 @@ struct CalenderView: View {
     @Environment(\.modelContext) private var modelContext
     var group : Group
     @Query private var missions: [Mission]
+    var filteredMissions: [Mission] {
+        missions.filter { $0.group?.id == group.id }
+    }
     
-  @State var clickedDate: Date? = Date()
-  
-  var body: some View {
-      VStack{
-          CalenderBodyView(group: group, month: Date(), clickedDate: $clickedDate)
-          
-          List {
-              ForEach(missions) { mission in
-                  HStack{
-                      Text("\(mission.title)")
-                      Spacer()
-                      Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
-                          .onTapGesture {
-                              mission.isCompleted.toggle()
-                          }
-                  }
-              }
-          }
-          .scrollContentBackground(.hidden)
-      }
-  }
+    @State var clickedDate: Date? = Date()
+    
+    var body: some View {
+        VStack{
+            CalenderBodyView(group: group, month: Date(), clickedDate: $clickedDate)
+            
+            List {
+                ForEach(filteredMissions) { mission in
+                    HStack{
+                        Text("\(mission.title)")
+                        Spacer()
+                        Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
+                            .onTapGesture {
+                                mission.isCompleted.toggle()
+                            }
+                    }
+                }
+            }
+            .scrollContentBackground(.hidden)
+        }
+    }
 }
 
 
