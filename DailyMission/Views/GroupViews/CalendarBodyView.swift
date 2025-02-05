@@ -10,8 +10,11 @@ import SwiftData
 
 struct CalenderBodyView: View {
     @Environment(\.modelContext) private var modelContext
-    var group : Group
     @Query private var missions: [Mission]
+    
+    var group : Group
+    var groupColor : Color
+    
     @State var month: Date
     @State var offset: CGSize = CGSize()
     @Binding var clickedDate: Date?
@@ -75,7 +78,7 @@ struct CalenderBodyView: View {
 //                        let day = index - firstWeekday + 1
                         let clicked = (clickedDate != nil) ? true : false
                         
-                        CellView(date: date, clicked: clicked, clickedDate: clickedDate)
+                        CellView(date: date, clicked: clicked, clickedDate: clickedDate, groupColor: groupColor)
                             .onTapGesture {
                                 if clickedDate != nil {
                                     clickedDate = (clickedDate == date) ? nil : date
@@ -95,10 +98,12 @@ private struct CellView: View {
     var date: Date
     var clicked: Bool = false
     var clickedDate: Date?
-    init(date: Date, clicked: Bool, clickedDate: Date?) {
+    var groupColor: Color
+    init(date: Date, clicked: Bool, clickedDate: Date?, groupColor: Color) {
         self.date = date
         self.clicked = clicked
         self.clickedDate = clickedDate
+        self.groupColor = groupColor
     }
     
     var body: some View {
@@ -108,7 +113,7 @@ private struct CellView: View {
                     NumberView(date: date, colorFore: .gray, colorBack: .clear)
                 } else if clickedDate != date && date.isSameDate(date: Date.now) {
                     NumberView(date: date, colorFore: .gray, colorBack: .gray)
-                }else { NumberView(date: date, colorFore: .red, colorBack: .yellow) }
+                }else { NumberView(date: date, colorFore: groupColor, colorBack: groupColor) }
             } else {
                 if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray) }
                 else { NumberView(date: date, colorFore: .gray, colorBack: .clear) }

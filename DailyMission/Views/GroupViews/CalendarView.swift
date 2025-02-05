@@ -17,11 +17,11 @@ struct CalendarView: View {
     var filteredMissions: [Mission] {
         missions.filter { $0.group?.id == group.id }
     }
-    
+    var groupColor : Color
     @State var clickedDate: Date? = Date()
     var body: some View {
             VStack{
-                CalenderBodyView(group: group, month: Date(), clickedDate: $clickedDate)
+                CalenderBodyView(group: group, groupColor: groupColor, month: Date(), clickedDate: $clickedDate)
                 List {
                     Section(content: {
                         ForEach(filteredMissions) { mission in

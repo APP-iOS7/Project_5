@@ -38,7 +38,7 @@ struct GroupView: View {
         NavigationStack {
             VStack {
                 TabView(selection: $selection) {
-                    CalendarView(group: group)
+                    CalendarView(group: group, groupColor: groupColor)
                         .tabItem {
                             Image(systemName: "calendar")
                             //                            Text("calendar")
