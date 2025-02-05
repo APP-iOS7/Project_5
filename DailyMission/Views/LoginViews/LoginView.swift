@@ -9,6 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct LoginView: View {
+    
+    let members = ["minseo" : "1234", "hajin" : "1234", "junho" : "1234"]
+    @AppStorage("loginMember") var member: String = "minseo"
+    
     @Environment(\.modelContext) private var modelContext
     @Query private var missions: [Mission]
     
