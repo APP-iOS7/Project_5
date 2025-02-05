@@ -13,10 +13,12 @@ final class Mission {
     var title: String
     var isCompleted: Bool
     var createdAt: Date
+    var group: Group?
     
-    init(title: String,_ isCompleted: Bool = false,_ createdAt: Date = Date()) {
+    init(title: String,_ isCompleted: Bool = false,_ createdAt: Date = Date(), group: Group?) {
         self.title = title
         self.isCompleted = isCompleted
         self.createdAt = createdAt
+        self.group = group
     }
 }

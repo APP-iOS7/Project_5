@@ -56,8 +56,8 @@ struct GroupView: View {
     }
 }
 
-#Preview {
-    GroupView(group: Group(name: "Ya", missionTitle: ["AA","BB"], memberCount: 3, category: "study", members: ["jin","min","jun"], color: "Black"))
-        .modelContainer(for: Mission.self, inMemory: true)
-}
+//#Preview {
+//    GroupView(group: Group(name: "Ya", missionTitle: ["AA","BB"], memberCount: 3, category: "study", members: ["jin","min","jun"], color: "Black"))
+//        .modelContainer(for: Mission.self, inMemory: true)
+//}
 

@@ -123,13 +123,11 @@ struct GroupAddView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("추가") {
                         let group = Group(name: name,
-                                          missionTitle: [],
                                           memberCount: 0,
                                           category: category,
                                           members: [],
                                           color:selectedColor,
-                                          dueDate: dueDate,
-                                          Date()
+                                          dueDate: dueDate
                         )
                         modelContext.insert(group)
                         dismiss()

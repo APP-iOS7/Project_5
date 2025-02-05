@@ -11,7 +11,7 @@ import SwiftData
 @Model
 final class Group {
     var name: String
-    var missionTitle: [Mission]?
+    var missionTitle: [Mission]? = []
     var memberCount: Int
     var category: String // 카테고리 (운동, 공부 등)
     var members: [String]? //그룹원들의 이름 리스트
@@ -19,7 +19,7 @@ final class Group {
     var dueDate: Date?
     var createdAt: Date
     
-    init(name: String, missionTitle: [Mission]?, memberCount: Int, category: String, members: [String], color: String?, dueDate: Date?, _ createdAt: Date = Date()) {
+    init(name: String, missionTitle: [Mission]? = [], memberCount: Int, category: String, members: [String], color: String?, dueDate: Date?, _ createdAt: Date = Date()) {
         self.name = name
         self.missionTitle = missionTitle
         self.memberCount = memberCount

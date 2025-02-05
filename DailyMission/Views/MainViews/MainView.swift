@@ -11,7 +11,7 @@ import SwiftData
 struct MainView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var groups: [Group]
-
+    
     @State private var showAddGroup: Bool = false
     @State private var isEditMode: Bool = false
     
@@ -34,12 +34,7 @@ struct MainView: View {
             VStack {
                 LazyVGrid(columns: columns, spacing: 15) {
                     ForEach(groups, id: \.self) { group in
-                        listButton(color: group.color ?? "blue",
-                                        name: group.name,
-                                        category: group.category,
-                                   count: group.memberCount,
-                                   dueDate: group.dueDate ?? nil
-                        )
+                        listButton(group: group)
                         
                         //.shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
 
@@ -57,40 +52,35 @@ struct MainView: View {
         }
     
     }
-    private func listButton(color: String, name: String, category: String, count: Int, dueDate: Date?) -> some View {
-        NavigationLink(destination: GroupView(group: Group(name: name,
-                                                           missionTitle: [],
-                                                           memberCount: 0,
-                                                           category: category,
-                                                           members: [],
-                                                           color: color,
-                                                           dueDate: nil))) {
+    private func listButton(group: Group) -> some View {
+        NavigationLink(destination: GroupView(group: group)) {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "person.2.fill")
                         .font(.system(size: iconSize))
-                        .foregroundColor(colorMap[color] ?? .blue)
+                        .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
+
                     
                     Spacer()
                     
-                    Text("\(count)")
+                    Text("\(group.memberCount)")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundStyle(.black)
                 }
                 Spacer()
-                Text(name)
+                Text(group.name)
                     .font(.headline)
                     .foregroundColor(.black)
                     .fontWeight(.bold)
                 HStack {
-                    Text(category)
+                    Text(group.category)
                         .foregroundColor(.gray)
                         .font(.system(size: 16))
                     Spacer()
-                    if let dueDate = dueDate {
+                    if let dueDate = group.dueDate {
                         Text(calculateDDay(from: dueDate)) // ✅ D-Day 형식으로 출력
-                            .foregroundColor(colorMap[color] ?? .blue)
+                            .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
                             .font(.system(size: 16))
                     }
                 }
@@ -98,7 +88,7 @@ struct MainView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, minHeight: 80)
-            .background((colorMap[color] ?? .blue).opacity(0.3))
+            .background((colorMap[group.color ?? "blue"] ?? .blue).opacity(0.3))
             .cornerRadius(12)
             
         }
