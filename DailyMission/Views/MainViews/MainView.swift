@@ -56,7 +56,9 @@ struct MainView: View {
                     .font(.headline)
                     .fontWeight(.bold)
                 LazyVGrid(columns: columns, spacing: 15) {
+                    
                     ForEach(allgroups, id: \.self) { group in
+                        
                         if !usergroups.contains(group) {
                             otherlistButton(group: group)
                         }
@@ -158,11 +160,9 @@ struct MainView: View {
             .cornerRadius(12)
             
         }
-        .sheet(isPresented: $showGroupInfo) {
-            if let group = selectedGroup {
+        .sheet(item: $selectedGroup) { group in
                 OtherGroupView(group: group)
             }
-        }
     }
     func calculateDDay(from dueDate: Date) -> String {
         let calendar = Calendar.current

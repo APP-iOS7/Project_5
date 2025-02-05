@@ -16,15 +16,16 @@ struct OtherGroupView: View {
     @Query private var allgroups: [Group]
     var usergroups: [Group] {
         guard let user = users.first(where: { $0.id == loggedInUser }) else {
-            print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
             return []
         }
-        print("로그인한 사용자: \(user.id), 속한 그룹 개수: \(user.groups.count)")
         return user.groups
     }
     
     var group : Group
     @Query private var missions: [Mission]
+    var filteredMissions: [Mission] {
+        missions.filter { $0.group?.id == group.id }
+    }
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
     let colorMap: [String: Color] = [
@@ -40,21 +41,69 @@ struct OtherGroupView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment:.leading) {
-                Text("Other Group \(group.name)")
+            VStack(alignment: .leading, spacing: 15) {
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("\(group.name)에서 하는 일!!")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    ForEach(filteredMissions) { mission in
+                        VStack(alignment:.leading) {
+                            HStack {
+                                Image(systemName: "checkmark")
+                                    .font(.body)
+                                    .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
+
+                                
+                                Text(" \(mission.title)")
+                                    .font(.body)
+                            }
+                        }
+                    }
+                }
+                .cornerRadius(12)
+                
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("카테고리")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Text("\(group.category)")
+                }
+                .cornerRadius(12)
+                
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("기간")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    if let dueDate = group.dueDate {
+                        Text(formattedDate(dueDate))
+                    } else {
+                        Text("마감 기한 없음")
+                    }
+
+                }
+                .cornerRadius(12)
+                Spacer()
                 
             }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("취소") {
-                    dismiss()
+            .navigationTitle(group.name)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("취소") {
+                        dismiss()
+                    }
+                    .foregroundColor(.black)
                 }
-                .foregroundColor(.black)
             }
         }
+        
     }
-
+    func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy년 M월 d일 E요일"
+        return formatter.string(from: date)
+    }
+    
 }
 
 //#Preview {
