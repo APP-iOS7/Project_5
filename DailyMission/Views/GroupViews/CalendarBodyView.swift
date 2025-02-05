@@ -10,9 +10,13 @@ import SwiftData
 
 struct CalenderBodyView: View {
     @Environment(\.modelContext) private var modelContext
-    var group : Group
     @Query private var missions: [Mission]
-    @State var month: Date
+    
+    var group : Group
+    var groupColor : Color
+    var groupMission : [Mission]
+    
+    @State var month: Date = Date()
     @State var offset: CGSize = CGSize()
     @Binding var clickedDate: Date?
     
@@ -75,7 +79,8 @@ struct CalenderBodyView: View {
 //                        let day = index - firstWeekday + 1
                         let clicked = (clickedDate != nil) ? true : false
                         
-                        CellView(date: date, clicked: clicked, clickedDate: clickedDate)
+                        let completedRatio = Double(completedCount(groupMission, date)) / Double(dateMissionCount(groupMission, date))
+                        CellView(date: date, clicked: clicked, clickedDate: clickedDate, groupColor: groupColor, completedRatio: completedRatio)
                             .onTapGesture {
                                 if clickedDate != nil {
                                     clickedDate = (clickedDate == date) ? nil : date
@@ -83,10 +88,31 @@ struct CalenderBodyView: View {
                                     clickedDate = date
                                 }
                             }
+                        
                     }
                 }
             }
         }
+    }
+    
+    private func completedCount (_ missions: [Mission], _ date: Date) -> Int {
+        var count = 0
+        for mission in missions {
+            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
+                count += 1
+            }
+        }
+        return count
+    }
+    
+    private func dateMissionCount (_ missions: [Mission], _ date: Date) -> Int {
+        var count = 0
+        for mission in missions {
+            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
+                count += 1
+            }
+        }
+        return count
     }
 }
 
@@ -95,23 +121,28 @@ private struct CellView: View {
     var date: Date
     var clicked: Bool = false
     var clickedDate: Date?
-    init(date: Date, clicked: Bool, clickedDate: Date?) {
+    var groupColor: Color
+    var completedRatio : Double
+    
+    init(date: Date, clicked: Bool, clickedDate: Date?, groupColor: Color, completedRatio : Double) {
         self.date = date
         self.clicked = clicked
         self.clickedDate = clickedDate
+        self.groupColor = groupColor
+        self.completedRatio = completedRatio
     }
     
     var body: some View {
         VStack {
             if clickedDate != nil {
                 if clickedDate != date && !date.isSameDate(date: Date.now)  {
-                    NumberView(date: date, colorFore: .gray, colorBack: .clear)
+                    NumberView(date: date, colorFore: .gray, colorBack: .clear, completedRatio: completedRatio)
                 } else if clickedDate != date && date.isSameDate(date: Date.now) {
-                    NumberView(date: date, colorFore: .gray, colorBack: .gray)
-                }else { NumberView(date: date, colorFore: .red, colorBack: .yellow) }
+                    NumberView(date: date, colorFore: .gray, colorBack: .gray, completedRatio: completedRatio)
+                }else { NumberView(date: date, colorFore: groupColor, colorBack: groupColor, completedRatio: completedRatio) }
             } else {
-                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray) }
-                else { NumberView(date: date, colorFore: .gray, colorBack: .clear) }
+                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray, completedRatio: completedRatio) }
+                else { NumberView(date: date, colorFore: .gray, colorBack: .clear, completedRatio: completedRatio) }
             }
         }
     }
@@ -121,21 +152,38 @@ private struct NumberView: View {
     var date: Date
     var colorFore : Color
     var colorBack : Color
-    init(date: Date, colorFore: Color, colorBack: Color) {
+    var completedRatio : Double
+    init(date: Date, colorFore: Color, colorBack: Color, completedRatio : Double) {
         self.date = date
         self.colorFore = colorFore
         self.colorBack = colorBack
+        self.completedRatio = completedRatio
     }
     var body: some View {
-        Circle()
-            .fill(colorBack.opacity(0.2))
-            .frame(width: 25, height: 25)
-            .padding(15)
+        VStack{
+            Circle()
+                .fill(colorBack.opacity(0.2))
+                .frame(width: 25, height: 25)
+                .padding(5)
                 .overlay(Text(date.formatted(
                     Date.FormatStyle()
                         .day()
                 )))
                 .foregroundColor(colorFore)
+            if completedRatio == 1 {
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 8, height: 8)
+            } else if completedRatio == 0 {
+                Circle()
+                    .fill(Color.gray.opacity(0.4))
+                    .frame(width: 8, height: 8)
+            } else {
+                Circle()
+                    .fill(Color.red.opacity(completedRatio))
+                    .frame(width: 8, height: 8)
+            }
+        }
     }
 }
 
