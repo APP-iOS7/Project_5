@@ -18,6 +18,7 @@ struct GroupView: View {
     @State private var newMissionTitle: String = ""
     @State private var showAddMissionAlert: Bool = false
     @State private var selection = 1
+    @State private var isShowingNewMission : Bool = false
     var body: some View {
         NavigationStack {
             VStack {
@@ -26,21 +27,32 @@ struct GroupView: View {
                     .bold()
                     .padding(.bottom, 20)
                 TabView(selection: $selection) {
+                    
                     CalenderView(group: group)
                         .tabItem {
                             Image(systemName: "calendar")
-//                            Text("calendar")
+                            //                            Text("calendar")
                         } .tag(1)
-                    CalenderView(group: group)
+                    ChartView(group: group)
                         .tabItem {
                             Image(systemName: "chart.xyaxis.line")
-//                            Text("chart")
+                            //                            Text("chart")
                         } .tag(2)
                 }
                 .accentColor(.green)
             }
+            .toolbar {
+                Button(action: {
+                    isShowingNewMission.toggle()
+                }) {
+                    Image(systemName: "plus")
+                }
+//                .sheet(isPresented: $isShowingNewMission, onDismiss: didDismiss)
+            }
+            
             .padding()
         }
+        
     }
 }
 

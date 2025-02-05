@@ -21,6 +21,17 @@ struct CalenderView: View {
       VStack{
           CalenderBodyView(group: group, month: Date(), clickedDate: $clickedDate)
           
+          List {
+              ForEach(missions) { mission in
+                  HStack{
+                      Text("\(mission.title)")
+                      Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
+                          .onTapGesture {
+                              mission.isCompleted.toggle()
+                          }
+                  }
+              }
+          }
       }
   }
 }
