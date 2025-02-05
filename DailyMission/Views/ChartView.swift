@@ -15,6 +15,11 @@ struct ChartView: View {
     var filteredMissions: [Mission] {
         missions.filter { $0.group?.id == group.id }
     }
+    var completedMissionRatio: Double {
+            let totalMissions = filteredMissions.count
+            let completedMissions = filteredMissions.filter { $0.isCompleted }.count
+            return totalMissions > 0 ? Double(completedMissions) / Double(totalMissions) : 0
+        }
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
@@ -30,23 +35,25 @@ struct ChartView: View {
     
     var body: some View {
         VStack {
+            
             LazyVGrid(columns: columns, spacing: 15) {
                 
-                listButton(title: "양준호", color: group.color ?? "blue")
-                listButton(title: "최하진", color: group.color ?? "blue")
-                listButton(title: "이민서", color: group.color ?? "blue")
+                listButton(title: "양준호", color: group.color ?? "blue", ratio: completedMissionRatio)
+                listButton(title: "최하진", color: group.color ?? "blue", ratio: completedMissionRatio)
+                listButton(title: "이민서", color: group.color ?? "blue", ratio: completedMissionRatio)
             }
             Spacer()
         }
         
     }
-    private func listButton(title: String, color: String) -> some View {
+    private func listButton(title: String, color: String, ratio: Double) -> some View {
         VStack(alignment: .leading) {
             
             Text(title)
                 .foregroundColor(.black)
                 .font(.headline)
                 .fontWeight(.bold)
+            Text("완료된 미션 비율: \(ratio * 100, specifier: "%.1f")%")
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 80)
