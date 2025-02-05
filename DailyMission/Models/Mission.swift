@@ -15,7 +15,7 @@ final class Mission {
     var dateStamp: [DateStamp]? // 날짜 : 날짜별 완료 여부를 표시
     var group: Group?
     
-    init(title: String,_ isCompleted: Bool = false, _ dateStamp: [DateStamp] = [],_ createdAt: Date = Date(), group: Group?) {
+    init(title: String,_ isCompleted: Bool = false, dateStamp: [DateStamp] = [],_ createdAt: Date = Date(), group: Group?) {
         self.title = title
         self.createdAt = createdAt
         self.dateStamp = dateStamp

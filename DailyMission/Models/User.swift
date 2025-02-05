@@ -12,9 +12,11 @@ import SwiftData
 final class User {
     var id: String
     var password: String
+    var groups: [Group]
     
-    init(id: String, password: String) {
+    init(id: String, password: String, groups: [Group] = []) {
         self.id = id
         self.password = password
+        self.groups = groups
     }
 }

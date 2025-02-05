@@ -24,6 +24,6 @@ struct DailyMissionApp: App {
         WindowGroup {
             IntroView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(PreviewContainer.shared.container)
     }
 }

@@ -16,13 +16,45 @@ struct LoginView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var missions: [Mission]
     
-    
+    @State private var userId: String = ""
+    @State private var password: String = ""
+    @State private var loggedInUser: User?
     @State private var newMissionTitle: String = ""
-    @State private var showAddMissionAlert: Bool = false
+    @State private var isLoggedIn: Bool = false
     
     var body: some View {
         NavigationStack {
             VStack {
+                Text("로그인")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.bottom, 20)
+                
+                TextField("아이디 입력", text: $userId)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                
+                SecureField("비밀번호 입력", text: $password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                Button(action: {
+                    login()
+                }) {
+                    Text("로그인")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                NavigationLink(destination: ContentView(), isActive: $isLoggedIn) {
+                    EmptyView()
+                }
+                
+                if let loggedInUser {
+                    Text("현재 로그인: \(loggedInUser)")
+                        .foregroundColor(.gray)
+                }
                 Text("LoginView")
                     .font(.largeTitle)
                     .bold()
@@ -37,9 +69,18 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-
+                
             }
             .padding()
+        }
+    }
+    private func login() {
+        if let password = members[userId], password == self.password {
+            loggedInUser = User(id: userId, password: password)
+            member = userId
+            isLoggedIn = true
+        } else {
+            print("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.")
         }
     }
 }
