@@ -47,7 +47,7 @@ struct GroupView: View {
                 }) {
                     Image(systemName: "plus")
                 }
-                .sheet(isPresented: $isShowingNewMission, onDismiss: didDismiss) {
+                .sheet(isPresented: $isShowingNewMission) {
                     AddNewMissionView(group: group)
                 }
             }
@@ -56,10 +56,6 @@ struct GroupView: View {
         }
         
     }
-    
-    func didDismiss() {
-        dismiss()
-        }
 }
 
 //#Preview {
