@@ -47,65 +47,62 @@ class PreviewContainer {
         let groups: [Group] = [
             Group(
                 name: "스터디 그룹",
-                memberCount: [users[1], users[2]].count,
-                category: "공부",
                 members: [users[1], users[2]],
+                category: "공부",
+                
                 color: "blue",
                 dueDate: calendar.date(byAdding: .day, value: 7, to: today)
             ),
             Group(
                 name: "운동 그룹",
-                memberCount: [users[0], users[1]].count,
-                category: "운동",
                 members: [users[0], users[1]],
+                category: "운동",
+                
                 color: "red",
                 dueDate: calendar.date(byAdding: .day, value: 10, to: today)
             ),
             Group(
                 name: "여행 계획",
-                memberCount: [users[0], users[2]].count,
-                category: "여행",
                 members: [users[0], users[2]],
+                category: "여행",
+                
                 color: "green",
                 dueDate: calendar.date(byAdding: .day, value: 14, to: today)
             ),
             Group(
                 name: "독서 모임",
-                memberCount: 0,
-                category: "취미",
                 members: [],
+                category: "취미",
                 color: "purple",
                 dueDate: calendar.date(byAdding: .day, value: 20, to: today)
             ),
             Group(
                 name: "요리 연구회",
-                memberCount: 0,
-                category: "요리",
                 members: [],
+                category: "요리",
                 color: "orange",
                 dueDate: calendar.date(byAdding: .day, value: 15, to: today)
             ),
             Group(
                 name: "프로그래밍 동아리",
-                memberCount: 0,
-                category: "코딩",
                 members: [],
+                category: "코딩",
                 color: "yellow",
                 dueDate: calendar.date(byAdding: .day, value: 30, to: today)
             ),
             Group(
                 name: "영화 감상회",
-                memberCount: 0,
-                category: "문화",
                 members: [],
+                category: "문화",
+                
                 color: "brown",
                 dueDate: calendar.date(byAdding: .day, value: 25, to: today)
             ),
             Group(
                 name: "사진 촬영 모임",
-                memberCount: 0,
-                category: "사진",
                 members: [],
+                category: "사진",
+                
                 color: "gray",
                 dueDate: calendar.date(byAdding: .day, value: 18, to: today)
             )

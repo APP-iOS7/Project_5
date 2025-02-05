@@ -123,9 +123,9 @@ struct GroupAddView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("추가") {
                         let group = Group(name: name,
-                                          memberCount: 0,
-                                          category: category,
                                           members: [],
+                                          category: category,
+                                          
                                           color:selectedColor,
                                           dueDate: dueDate
                         )

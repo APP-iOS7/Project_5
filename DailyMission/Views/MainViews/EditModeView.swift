@@ -45,15 +45,13 @@ struct EditModeView: View {
                         .foregroundColor(.gray)
                         .font(.title3)
                 } else {
-                    VStack {
-                        List {
+                    ScrollView {
+                        LazyVStack {
                             ForEach(usergroups, id: \.self) { group in
                                 editRow(group: group)
                                 
                             }
                         }
-                        .listStyle(.plain)
-                        .cornerRadius(12)
                     }
                     
                 }
