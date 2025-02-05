@@ -51,25 +51,6 @@ struct LoginView: View {
                     EmptyView()
                 }
                 
-                if let loggedInUser {
-                    Text("현재 로그인: \(loggedInUser)")
-                        .foregroundColor(.gray)
-                }
-                Text("LoginView")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.bottom, 20)
-                
-                
-                NavigationLink(destination: ContentView()) {
-                    Text("이동")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                
             }
             .padding()
         }
