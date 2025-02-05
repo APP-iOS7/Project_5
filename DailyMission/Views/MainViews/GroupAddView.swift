@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct GroupAppView: View {
+struct GroupAddView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var selectedColor: String = "blue"
