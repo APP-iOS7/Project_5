@@ -40,6 +40,9 @@ struct MainView: View {
                                    count: group.memberCount,
                                    dueDate: group.dueDate ?? nil
                         )
+                        
+                        //.shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
+
                     }
                     .onDelete(perform: deleteGroup)
                 }
@@ -95,7 +98,7 @@ struct MainView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, minHeight: 80)
-            .background(Color(.white))
+            .background((colorMap[color] ?? .blue).opacity(0.3))
             .cornerRadius(12)
             
         }
