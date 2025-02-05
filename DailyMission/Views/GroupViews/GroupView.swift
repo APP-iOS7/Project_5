@@ -34,6 +34,7 @@ struct GroupView: View {
         "brown": .brown
     ]
     var body: some View {
+        let groupColor : Color = colorMap[group.color!] ?? .blue
         NavigationStack {
             VStack {
                 TabView(selection: $selection) {
@@ -48,7 +49,7 @@ struct GroupView: View {
                             //                            Text("chart")
                         } .tag(2)
                 }
-                .accentColor(colorMap[group.color!].opacity(0.2) as? Color)
+                .accentColor(groupColor)
             }
             .navigationTitle(group.name)
             .onAppear {
