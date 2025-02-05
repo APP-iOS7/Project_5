@@ -18,29 +18,32 @@ struct CalenderView: View {
         missions.filter { $0.group?.id == group.id }
     }
     
-    
     @State var clickedDate: Date? = Date()
     
     var body: some View {
-        VStack{
-            CalenderBodyView(group: group, month: Date(), clickedDate: $clickedDate)
-            
-            List {
-                ForEach(filteredMissions) { mission in
-                        HStack{
-                            Text("\(mission.title)")
-                            Spacer()
-//                            Image(systemName: mission.isCompleted ? "checkmark.square.fill" : "square")
-//                                .onTapGesture {
-//                                    mission.isCompleted.toggle()
-//                                }
-                        
-                    }
+            VStack{
+                CalenderBodyView(group: group, month: Date(), clickedDate: $clickedDate)
+                List {
+                    Section(content: {
+                        ForEach(filteredMissions) { mission in
+                            if let clickedDate = clickedDate, let index = mission.dateStamp?.firstIndex(where: { $0.date.formatted(Date.FormatStyle().year().month().day()) == clickedDate.formatted(Date.FormatStyle().year().month().day()) }) {
+                                HStack{
+                                    Text("\(mission.title)")
+                                    Spacer()
+                                    Image(systemName: (mission.dateStamp![index].isCompleted) ? "checkmark.square.fill" : "square")
+                                        .onTapGesture {
+                                            mission.dateStamp?[index].isCompleted.toggle()
+                                        }
+                                }
+                            }
+                        }
+                    }, header: {
+                        Text("미션")
+                    })
                 }
+                .scrollContentBackground(.hidden)
+                .padding()
             }
-            .scrollContentBackground(.hidden)
-            
-        }
     }
 }
 

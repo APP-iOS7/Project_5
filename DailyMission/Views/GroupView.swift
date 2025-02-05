@@ -15,18 +15,26 @@ struct GroupView: View {
     var group : Group
     @Query private var missions: [Mission]
     
-    @State private var isNavigated: Bool = false
     
-    @State private var newMissionTitle: String = ""
-    @State private var showAddMissionAlert: Bool = false
     @State private var selection = 1
+    @State private var newMissionTitle: String = ""
+    @State private var isNavigated: Bool = false
+    @State private var showAddMissionAlert: Bool = false
     @State private var isShowingNewMission : Bool = false
+    
+    let colorMap: [String: Color] = [
+        "red": .red,
+        "orange": .orange,
+        "yellow": .yellow,
+        "green": .green,
+        "blue": .blue,
+        "purple": .purple,
+        "brown": .brown
+    ]
     var body: some View {
         NavigationStack {
             VStack {
-
                 TabView(selection: $selection) {
-                    
                     CalenderView(group: group)
                         .tabItem {
                             Image(systemName: "calendar")
@@ -38,8 +46,9 @@ struct GroupView: View {
                             //                            Text("chart")
                         } .tag(2)
                 }
-                .accentColor(.green)
+                .accentColor(colorMap[group.color!].opacity(0.2) as? Color)
             }
+            
             .navigationTitle(group.name)
             .toolbar {
                 Button(action: {
@@ -51,6 +60,7 @@ struct GroupView: View {
                     AddNewMissionView(group: group)
                 }
             }
+            
             
             .padding()
         }
