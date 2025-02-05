@@ -25,6 +25,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
+            
             VStack {
                 
                 if isEditMode == .active {

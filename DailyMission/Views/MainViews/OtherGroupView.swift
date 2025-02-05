@@ -38,13 +38,14 @@ struct OtherGroupView: View {
         "brown": .brown
     ]
     let iconSize: CGFloat = 30
-    
+    @State private var isJoined: Bool = false
     var body: some View {
         NavigationStack {
+            Divider()
             VStack(alignment: .leading, spacing: 15) {
                 VStack(alignment: .leading, spacing: 15) {
                     Text("\(group.name)에서 하는 일!!")
-                        .font(.title3)
+                        .font(.title)
                         .fontWeight(.bold)
                     ForEach(filteredMissions) { mission in
                         VStack(alignment:.leading) {
@@ -52,38 +53,57 @@ struct OtherGroupView: View {
                                 Image(systemName: "checkmark")
                                     .font(.body)
                                     .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
-
+                                
                                 
                                 Text(" \(mission.title)")
-                                    .font(.body)
+                                    .font(.headline)
                             }
                         }
                     }
                 }
-                .cornerRadius(12)
-                
+                Rectangle()
+                    .frame(height: 20)
+                    .foregroundColor(Color.white)
                 VStack(alignment: .leading, spacing: 15) {
                     Text("카테고리")
-                        .font(.title3)
+                        .font(.title)
                         .fontWeight(.bold)
                     Text("\(group.category)")
                 }
-                .cornerRadius(12)
-                
+                Rectangle()
+                    .frame(height: 20)
+                    .foregroundColor(Color.white)
                 VStack(alignment: .leading, spacing: 15) {
                     Text("기간")
-                        .font(.title3)
+                        .font(.title)
                         .fontWeight(.bold)
                     if let dueDate = group.dueDate {
                         Text(formattedDate(dueDate))
+                            .font(.headline)
                     } else {
                         Text("마감 기한 없음")
+                            .font(.headline)
                     }
-
+                    
                 }
-                .cornerRadius(12)
                 Spacer()
+                Button(action: {
+                    joinGroup()
+                    dismiss()
+                }) {
+                    Text(isJoined ? "이미 참여한 그룹입니다" : "그룹 참여")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(isJoined ? Color.gray : colorMap[group.color ?? "blue"] ?? .blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .disabled(isJoined)
                 
+            }
+            .padding()
+            .onAppear {
+                checkIfJoined()
             }
             .navigationTitle(group.name)
             .toolbar {
@@ -96,6 +116,21 @@ struct OtherGroupView: View {
             }
         }
         
+    }
+    private func checkIfJoined() {
+        if let user = users.first(where: { $0.id == loggedInUser }) {
+            isJoined = user.groups.contains(where: { $0.id == group.id })
+        }
+    }
+    
+    private func joinGroup() {
+        if let user = users.first(where: { $0.id == loggedInUser }) {
+            if !user.groups.contains(where: { $0.id == group.id }) {
+                user.groups.append(group) // 그룹 추가
+                try? modelContext.save()  // 변경 사항 저장
+                isJoined = true // UI 업데이트
+            }
+        }
     }
     func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
