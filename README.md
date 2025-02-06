@@ -40,6 +40,8 @@
 ---
 ## Entity 관계도
 ![entity diagram](https://github.com/APP-iOS7/Project_5/blob/dev/diagram.png)
+### property 포함하여 관계 분석
+![entity diagram](https://github.com/APP-iOS7/Project_5/blob/dev/diagram2.png)
 ---
 ## Entity 관계 설명
 * User ↔ UserGroup ↔ Group (Many-to-Many 관계, 중간 테이블 UserGroup 사용)
