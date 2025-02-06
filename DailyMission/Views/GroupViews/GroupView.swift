@@ -53,9 +53,9 @@ struct GroupView: View {
                 .accentColor(groupColor)
             }
             .navigationTitle(group.name)
-//            .onAppear {
-//                MakeDailyTimeStamp(missions: filteredMissions)
-//            }
+            .onAppear {
+                MakeDailyTimeStamp(missions: filteredMissions)
+            }
             .toolbar {
                 Button(action: {
                     isShowingNewMission.toggle()
@@ -70,35 +70,35 @@ struct GroupView: View {
         }
     }
 
-//    //미션->유저스탬프->dateStamp 에서 뉴 dateStamp 추가
-//    private func MakeDailyTimeStamp(missions: [Mission]) {
-//        var dateStamp : [DateStamp]
-//        for mission in missions {
-//            if let index = mission.userStamp?.firstIndex(where: {$0.userId == user.id}) { //지금 유저 스탬프에 자신이 존재하는지 확인, 있다면
-//                dateStamp = mission.userStamp?[index].dateStamp ?? [] //dateStamp받아오기
-//                if let _ = group.dueDate,
-//                   ((dateStamp.firstIndex(where: { $0.date.isSameDate(date: Date.now) })) == nil) && //오늘 날짜의 데이트 스탬프 없고 && 마감일있다면 마감일 전일때만 스탬프 새로 추기
-//                    ( ( compareDate(mission.endDate!, Date.now) >= 0  && mission.endDate != nil) ||
-//                      ( compareDate(group.dueDate!, Date.now) >= 0  && mission.endDate == nil) ) {
-//                    mission.userStamp?[index].dateStamp.append(DateStamp(date: Date.now, isCompleted: false))
-//                    try? self.modelContext.save()
-//                    print("Make today's \(mission.title) DateStamp!")
-//                }
-//            } else if let _ = group.dueDate,
-//                      ( compareDate(mission.endDate!, Date.now) >= 0  && mission.endDate != nil) ||
-//                        ( compareDate(group.dueDate!, Date.now) >= 0  && mission.endDate == nil) { //지금 유저 스탬프에 없을때, 오늘이 마감일 전이라면 유저 스탬프 새로 발행
-//                mission.userStamp?.append(UserStamp(userId: user.id, dateStamp: [DateStamp(date: Date.now, isCompleted: false)]))
-//                try? self.modelContext.save()
+    //미션->유저스탬프->dateStamp 에서 뉴 dateStamp 추가
+    private func MakeDailyTimeStamp(missions: [Mission]) {
+        var dateStamp : [DateStamp]
+        for mission in missions {
+            if let index = mission.userStamp?.firstIndex(where: {$0.userId == user.id}) { //지금 유저 스탬프에 자신이 존재하는지 확인, 있다면
+                dateStamp = mission.userStamp?[index].dateStamp ?? [] //dateStamp받아오기
+                if let _ = group.dueDate,
+                   ((dateStamp.firstIndex(where: { $0.date.isSameDate(date: Date.now) })) == nil) && //오늘 날짜의 데이트 스탬프 없고 && 마감일있다면 마감일 전일때만 스탬프 새로 추기
+                    ( ( compareDate(mission.endDate!, Date.now) >= 0  && mission.endDate != nil) ||
+                      ( compareDate(group.dueDate!, Date.now) >= 0  && mission.endDate == nil) ) {
+                    mission.userStamp?[index].dateStamp.append(DateStamp(date: Date.now, isCompleted: false))
+                    try? self.modelContext.save()
+                    print("Make today's \(mission.title) DateStamp!")
+                }
+            } else if let _ = group.dueDate,
+                      ( compareDate(mission.endDate!, Date.now) >= 0  && mission.endDate != nil) ||
+                        ( compareDate(group.dueDate!, Date.now) >= 0  && mission.endDate == nil) { //지금 유저 스탬프에 없을때, 오늘이 마감일 전이라면 유저 스탬프 새로 발행
+                mission.userStamp?.append(UserStamp(userId: user.id, dateStamp: [DateStamp(date: Date.now, isCompleted: false)]))
+                try? self.modelContext.save()
+            }
+//            if let _ = mission.endDate {
+//                print("\(mission.title)이 \(compareDate(mission.endDate!, Date.now))일 남음")
 //            }
-////            if let _ = mission.endDate {
-////                print("\(mission.title)이 \(compareDate(mission.endDate!, Date.now))일 남음")
-////            }
-//        }
-//    }
-//    
-//    private func compareDate(_ today : Date, _ endDate : Date) -> Int {
-//        return Calendar.current.getDateGap(from: endDate, to: today)
-//    }
+        }
+    }
+    
+    private func compareDate(_ today : Date, _ endDate : Date) -> Int {
+        return Calendar.current.getDateGap(from: endDate, to: today)
+    }
 }
 
 // 시간 부분을 버리기
@@ -122,4 +122,8 @@ extension Calendar {
 //    GroupView(group: Group(name: "aaa", memberCount: 3, category: "qq", members: ["q","b","c"], color: "ww", dueDate: Date()))
 //        .modelContainer(for: Mission.self, inMemory: true)
 //}
+
+
+
+
 
