@@ -75,12 +75,38 @@ struct GroupView: View {
         for mission in missions {
             if let index = mission.userStamp?.firstIndex(where: {$0.userId == user.id}) {
                 dateStamp = mission.userStamp?[index].dateStamp ?? []
-                if (((dateStamp.firstIndex(where: { $0.date.isSameDate(date: Date.now) })) != nil)) {
+                if (((dateStamp.firstIndex(where: { $0.date.isSameDate(date: Date.now) })) != nil) ||
+                    ( compareDate(mission.endDate!, Date.now) >= 0  && mission.endDate != nil) ) {
                     mission.userStamp?[index].dateStamp.append(DateStamp(date: Date.now, isCompleted: false))
+                    print("Make today's \(mission.title) DateStamp!")
                 }
             }
-            
+//            if let _ = mission.endDate {
+//                print("\(mission.title)이 \(compareDate(mission.endDate!, Date.now))일 남음")
+//            }
         }
+    }
+    
+    private func compareDate(_ today : Date, _ endDate : Date) -> Int {
+        return Calendar.current.getDateGap(from: endDate, to: today)
+        
+    }
+}
+
+// 시간 부분을 버리기
+extension Date {
+    var onlyDate: Date {
+        let component = Calendar.current.dateComponents([.year, .month, .day], from: self)
+        return Calendar.current.date(from: component) ?? Date()
+    }
+}
+
+// 두 날짜 사이의 날짜 차이 구하기
+extension Calendar {
+    func getDateGap(from: Date, to: Date) -> Int {
+        let fromDateOnly = from.onlyDate
+        let toDateOnly = to.onlyDate
+        return self.dateComponents([.day], from: fromDateOnly, to: toDateOnly).day ?? 0
     }
 }
 
