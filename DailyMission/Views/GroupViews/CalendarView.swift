@@ -30,21 +30,29 @@ struct CalendarView: View {
             CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissions, clickedDate: $clickedDate)
             List {
                 Section(content: {
-                    ForEach(filteredMissions) { mission in
+                    ForEach(filteredMissions.sorted(by: {
+                        let firstCompleted = $0.dateStamp?.contains(where: { $0.isCompleted }) ?? false
+                        let secondCompleted = $1.dateStamp?.contains(where: { $0.isCompleted }) ?? false
+                        return firstCompleted == secondCompleted ? $0.title < $1.title : !firstCompleted
+                    })) { mission in
                         if let clickedDate = clickedDate, let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
-                            HStack{
+                            HStack {
                                 let missionIcon = missionIcons.contains(mission.icon ?? "") ? mission.icon : "doc"
                                 
                                 Image(systemName: missionIcon!)
                                     .foregroundColor(groupColor)
-                                    .font(.title2)
+                                    .frame(minWidth: 30)
+                                
                                 Text("\(mission.title)")
                                 Spacer()
+                                
                                 Image(systemName: (mission.dateStamp![index].isCompleted) ? "checkmark.square.fill" : "square")
+                                    .foregroundColor(groupColor)
                                     .onTapGesture {
                                         mission.dateStamp?[index].isCompleted.toggle()
                                     }
                             }
+                            .padding(.vertical, 5)
                         }
                     }
                 }, header: {
@@ -52,7 +60,7 @@ struct CalendarView: View {
                 })
             }
             .scrollContentBackground(.hidden)
-            .padding()
+
         }
     }
 }

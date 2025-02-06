@@ -122,54 +122,79 @@ class PreviewContainer {
         users[1].groups = [groups[0], groups[1]]
         users[2].groups = [groups[0], groups[2]]
         try? container.mainContext.save()
-        
-        let missions: [(String, Group, [DateStamp])] = [
+        let missionIcons = [
+            "star", "heart", "flame", "bolt", "leaf",
+            "pencil", "book", "clock", "figure.walk", "bicycle",
+            "gamecontroller", "paintbrush", "camera", "music.note", "flag"
+        ]
+
+        let missions: [(String, Group, [DateStamp], Date, String)] = [
             // 스터디 그룹
-            ("Swift 공부하기", groups[0], [DateStamp(date: today, isCompleted: true)]),
-            ("알고리즘 문제 풀기", groups[0], [DateStamp(date: today, isCompleted: false)]),
-            ("코딩 테스트 연습", groups[0], [DateStamp(date: today, isCompleted: false)]),
+            ("Swift 공부하기", groups[0], [DateStamp(date: today, isCompleted: true)],
+                Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today, missionIcons[0]),
+            ("알고리즘 문제 풀기", groups[0], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today, missionIcons[1]),
+            ("코딩 테스트 연습", groups[0], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today, missionIcons[2]),
             
             // 운동 그룹
-            ("헬스장 가기", groups[1], [DateStamp(date: today, isCompleted: false)]),
-            ("달리기 5km", groups[1], [DateStamp(date: today, isCompleted: true)]),
-            ("팔굽혀펴기 100개", groups[1], [DateStamp(date: today, isCompleted: false)]),
+            ("헬스장 가기", groups[1], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 3, to: today) ?? today, missionIcons[3]),
+            ("달리기 5km", groups[1], [DateStamp(date: today, isCompleted: true)],
+                Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today, missionIcons[4]),
+            ("팔굽혀펴기 100개", groups[1], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today, missionIcons[5]),
             
             // 여행 계획
-            ("여행 일정 정하기", groups[2], [DateStamp(date: today, isCompleted: false)]),
-            ("비행기표 예매", groups[2], [DateStamp(date: today, isCompleted: false)]),
-            ("숙소 예약", groups[2], [DateStamp(date: today, isCompleted: true)]),
+            ("여행 일정 정하기", groups[2], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 14, to: today) ?? today, missionIcons[6]),
+            ("비행기표 예매", groups[2], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today, missionIcons[7]),
+            ("숙소 예약", groups[2], [DateStamp(date: today, isCompleted: true)],
+                Calendar.current.date(byAdding: .day, value: 12, to: today) ?? today, missionIcons[8]),
             
             // 독서 모임
-            ("이달의 책 선정", groups[3], [DateStamp(date: today, isCompleted: false)]),
-            ("책 읽기 목표 설정", groups[3], [DateStamp(date: today, isCompleted: true)]),
-            ("독후감 공유", groups[3], [DateStamp(date: today, isCompleted: false)]),
+            ("이달의 책 선정", groups[3], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today, missionIcons[9]),
+            ("책 읽기 목표 설정", groups[3], [DateStamp(date: today, isCompleted: true)],
+                Calendar.current.date(byAdding: .day, value: 20, to: today) ?? today, missionIcons[10]),
+            ("독후감 공유", groups[3], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 25, to: today) ?? today, missionIcons[11]),
             
             // 요리 연구회
-            ("이번 주 요리 주제 정하기", groups[4], [DateStamp(date: today, isCompleted: false)]),
-            ("레시피 연구하기", groups[4], [DateStamp(date: today, isCompleted: true)]),
-            ("팀별 요리 대회 개최", groups[4], [DateStamp(date: today, isCompleted: false)]),
+            ("이번 주 요리 주제 정하기", groups[4], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            ("레시피 연구하기", groups[4], [DateStamp(date: today, isCompleted: true)],
+                Calendar.current.date(byAdding: .day, value: 9, to: today) ?? today, missionIcons[13]),
+            ("팀별 요리 대회 개최", groups[4], [DateStamp(date: today, isCompleted: false)],
+                Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today, missionIcons[13]),
             
             // 프로그래밍 동아리
-            ("오픈소스 프로젝트 기여", groups[5], [DateStamp(date: today, isCompleted: false)]),
-            ("새로운 언어 배우기", groups[5], [DateStamp(date: today, isCompleted: false)]),
-            ("해커톤 준비", groups[5], [DateStamp(date: today, isCompleted: true)]),
+            ("오픈소스 프로젝트 기여", groups[5], [DateStamp(date: today, isCompleted: false)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            ("새로운 언어 배우기", groups[5], [DateStamp(date: today, isCompleted: false)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            ("해커톤 준비", groups[5], [DateStamp(date: today, isCompleted: true)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
             
             // 영화 감상회
-            ("이번 달 영화 선정", groups[6], [DateStamp(date: today, isCompleted: false)]),
-            ("감상문 작성", groups[6], [DateStamp(date: today, isCompleted: true)]),
-            ("영화 토론회 개최", groups[6], [DateStamp(date: today, isCompleted: false)]),
+            ("이번 달 영화 선정", groups[6], [DateStamp(date: today, isCompleted: false)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            ("감상문 작성", groups[6], [DateStamp(date: today, isCompleted: true)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            ("영화 토론회 개최", groups[6], [DateStamp(date: today, isCompleted: false)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
             
             // 사진 촬영 모임
-            ("촬영 테마 정하기", groups[7], [DateStamp(date: today, isCompleted: true)]),
-            ("야외 촬영 일정 조율", groups[7], [DateStamp(date: today, isCompleted: false)]),
-            ("사진 편집 워크숍 개최", groups[7], [DateStamp(date: today, isCompleted: false)])
+            ("촬영 테마 정하기", groups[7], [DateStamp(date: today, isCompleted: true)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            ("야외 촬영 일정 조율", groups[7], [DateStamp(date: today, isCompleted: false)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            ("사진 편집 워크숍 개최", groups[7], [DateStamp(date: today, isCompleted: false)], Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12])
         ]
         
-        for (title, group, dateStamp) in missions {
-            let mission = Mission(title: title, dateStamp: dateStamp, group: group)
+        for (title, group, dateStamp, endDate, icon) in missions {
+            let mission = Mission(title: title, dateStamp: dateStamp, endDate: endDate, icon: icon, group: group)
             container.mainContext.insert(mission)
+            if group.missionTitle == nil {
+                group.missionTitle = []
+            }
+            group.missionTitle?.append(mission)
         }
-        
+
         try? container.mainContext.save()
+
     }
 }
