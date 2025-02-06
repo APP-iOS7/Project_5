@@ -12,8 +12,12 @@ struct EditModeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [User]
     var user : User
+    @Query private var userGroups: [UserGroup]
     var usergroups: [Group] {
-        user.groups!
+        guard let user = users.first(where: { $0.id == user.id }) else {
+            return []
+        }
+        return user.userGroups.map { $0.group }
     }
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
