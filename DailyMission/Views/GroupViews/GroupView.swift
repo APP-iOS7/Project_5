@@ -80,6 +80,9 @@ struct GroupView: View {
                     mission.userStamp?[index].dateStamp.append(DateStamp(date: Date.now, isCompleted: false))
                     print("Make today's \(mission.title) DateStamp!")
                 }
+            } else if let _ = mission.endDate,
+                      compareDate(mission.endDate!, Date.now) >= 0 {
+                mission.userStamp?.append(UserStamp(userId: user.id, dateStamp: [DateStamp(date: Date.now, isCompleted: false)]))
             }
 //            if let _ = mission.endDate {
 //                print("\(mission.title)이 \(compareDate(mission.endDate!, Date.now))일 남음")
