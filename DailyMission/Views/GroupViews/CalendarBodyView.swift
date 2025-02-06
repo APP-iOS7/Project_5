@@ -96,24 +96,24 @@ struct CalenderBodyView: View {
     }
     
     private func completedCount (_ missions: [Mission], _ date: Date) -> Int {
-        var count = 0
-        for mission in missions {
-            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
-                count += 1
+            var count = 0
+            for mission in missions {
+                if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
+                    count += 1
+                }
             }
+            return count
         }
-        return count
-    }
-    
-    private func dateMissionCount (_ missions: [Mission], _ date: Date) -> Int {
-        var count = 0
-        for mission in missions {
-            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
-                count += 1
+        
+        private func dateMissionCount (_ missions: [Mission], _ date: Date) -> Int {
+            var count = 0
+            for mission in missions {
+                if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
+                    count += 1
+                }
             }
+            return count
         }
-        return count
-    }
 }
 
 // MARK: - 일자 셀 뷰

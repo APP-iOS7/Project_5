@@ -43,7 +43,7 @@ struct GroupView: View {
                             Image(systemName: "calendar")
                             //                            Text("calendar")
                         } .tag(1)
-                    ChartView(group: group)
+                    ChartView(group: group, groupColor: groupColor)
                         .tabItem {
                             Image(systemName: "chart.xyaxis.line")
                             //                            Text("chart")
