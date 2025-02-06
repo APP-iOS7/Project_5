@@ -37,3 +37,12 @@
     - ccc
     - ccc
       
+---
+## Entity 관계도
+![entity diagram](https://github.com/APP-iOS7/Project_5/blob/dev/diagram.png)
+---
+## Entity 관계 설명
+* User ↔ UserGroup ↔ Group (Many-to-Many 관계, 중간 테이블 UserGroup 사용)
+* Group ↔ Mission (One-to-Many, 하나의 그룹에 여러 미션이 속함)
+* Mission ↔ UserStamp (One-to-Many, 하나의 미션에 여러 유저 진행 기록 존재)
+* UserStamp ↔ DateStamp (One-to-Many, 한 유저가 특정 미션에서 여러 날짜의 진행 상태를 기록)
