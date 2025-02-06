@@ -30,34 +30,36 @@ struct CalendarView: View {
             CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissionsState, clickedDate: $clickedDate, user: user)
             List {
                 Section(header: Text("미션")) {
-                    ForEach(filteredMissionsState.sorted(by: { first, second in
-                        let firstCompleted = isMissionCompleted(for: first)
-                        let secondCompleted = isMissionCompleted(for: second)
-                        return firstCompleted == secondCompleted ? first.title < second.title : !firstCompleted
-                    })) { mission in
-                        
-                        HStack {
-                            let missionIcon = missionIcons.contains(mission.icon ?? "") ? mission.icon : "doc"
+                    if let _ = clickedDate { //날짜 클릭시에만 미션 리스트 등장!
+                        ForEach(filteredMissionsState.sorted(by: { first, second in
+                            let firstCompleted = isMissionCompleted(for: first)
+                            let secondCompleted = isMissionCompleted(for: second)
+                            return firstCompleted == secondCompleted ? first.title < second.title : !firstCompleted
+                        })) { mission in
                             
-                            Image(systemName: missionIcon!)
-                                .foregroundColor(groupColor)
-                                .frame(minWidth: 30)
-                            
-                            Text("\(mission.title)")
-                            Spacer()
-                            
-                            if let clickedDate = clickedDate,
-                               let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }),
-                               let index = userStamp.dateStamp.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
+                            HStack {
+                                let missionIcon = missionIcons.contains(mission.icon ?? "") ? mission.icon : "doc"
                                 
-                                Image(systemName: (userStamp.dateStamp[index].isCompleted) ? "checkmark.square.fill" : "square")
+                                Image(systemName: missionIcon!)
                                     .foregroundColor(groupColor)
-                                    .onTapGesture {
-                                        toggleMissionCompletion(userStamp: userStamp, index: index)
-                                    }
+                                    .frame(minWidth: 30)
+                                
+                                Text("\(mission.title)")
+                                Spacer()
+                                
+                                if let clickedDate = clickedDate,
+                                   let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }),
+                                   let index = userStamp.dateStamp.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
+                                    
+                                    Image(systemName: (userStamp.dateStamp[index].isCompleted) ? "checkmark.square.fill" : "square")
+                                        .foregroundColor(groupColor)
+                                        .onTapGesture {
+                                            toggleMissionCompletion(userStamp: userStamp, index: index)
+                                        }
+                                }
                             }
+                            .padding(.vertical, 5)
                         }
-                        .padding(.vertical, 5)
                     }
                 }
             }
