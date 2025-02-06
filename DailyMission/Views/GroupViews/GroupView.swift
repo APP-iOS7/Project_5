@@ -39,12 +39,12 @@ struct GroupView: View {
         NavigationStack {
             VStack {
                 TabView(selection: $selection) {
-                    CalendarView(group: group, groupColor: groupColor)
+                    CalendarView(group: group, groupColor: groupColor, user: user)
                         .tabItem {
                             Image(systemName: "calendar")
                             //                            Text("calendar")
                         } .tag(1)
-                    ChartView(group: group, groupColor: groupColor)
+                    ChartView(group: group, groupColor: groupColor, user: user)
                         .tabItem {
                             Image(systemName: "chart.xyaxis.line")
                             //                            Text("chart")

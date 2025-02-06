@@ -13,11 +13,13 @@ import SwiftData
 struct CalendarView: View {
     @Environment(\.modelContext) private var modelContext
     var group : Group
+    
     @Query private var missions: [Mission]
     var filteredMissions: [Mission] {
         missions.filter { $0.group?.id == group.id }
     }
     var groupColor : Color
+    var user : User
     @State var clickedDate: Date? = Date()
     
     let missionIcons = [
@@ -27,15 +29,18 @@ struct CalendarView: View {
     ]
     var body: some View {
         VStack{
-            CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissions, clickedDate: $clickedDate)
+            CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissions, clickedDate: $clickedDate, user: user)
             List {
                 Section(content: {
-                    ForEach(filteredMissions.sorted(by: {
-                        let firstCompleted = $0.dateStamp?.contains(where: { $0.isCompleted }) ?? false
-                        let secondCompleted = $1.dateStamp?.contains(where: { $0.isCompleted }) ?? false
-                        return firstCompleted == secondCompleted ? $0.title < $1.title : !firstCompleted
+                    ForEach(filteredMissions.sorted(by: { first, second in
+                        let firstCompleted = isMissionCompleted(for: first)
+                        let secondCompleted = isMissionCompleted(for: second)
+                        return firstCompleted == secondCompleted ? first.title < second.title : !firstCompleted
                     })) { mission in
-                        if let clickedDate = clickedDate, let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
+                        if let clickedDate = clickedDate,
+                           let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }),
+                           let index = userStamp.dateStamp.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
+                            
                             HStack {
                                 let missionIcon = missionIcons.contains(mission.icon ?? "") ? mission.icon : "doc"
                                 
@@ -46,10 +51,11 @@ struct CalendarView: View {
                                 Text("\(mission.title)")
                                 Spacer()
                                 
-                                Image(systemName: (mission.dateStamp![index].isCompleted) ? "checkmark.square.fill" : "square")
+                                Image(systemName: (userStamp.dateStamp[index].isCompleted) ? "checkmark.square.fill" : "square")
                                     .foregroundColor(groupColor)
                                     .onTapGesture {
-                                        mission.dateStamp?[index].isCompleted.toggle()
+                                        userStamp.dateStamp[index].isCompleted.toggle()
+                                        try? modelContext.save()
                                     }
                             }
                             .padding(.vertical, 5)
@@ -60,8 +66,14 @@ struct CalendarView: View {
                 })
             }
             .scrollContentBackground(.hidden)
-
+            
         }
+    }
+    private func isMissionCompleted(for mission: Mission) -> Bool {
+        guard let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }) else {
+            return false
+        }
+        return userStamp.dateStamp.contains(where: { $0.isCompleted })
     }
 }
 

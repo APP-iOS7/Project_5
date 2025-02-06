@@ -13,13 +13,11 @@ struct MainView: View {
     @Query private var users: [User]
     @AppStorage("loginMember") var loggedInUser: String?
     @Query private var allgroups: [Group]
+    var user: User? {
+        users.first(where: { $0.id == loggedInUser })
+    }
     var usergroups: [Group] {
-        guard let user = users.first(where: { $0.id == loggedInUser }) else {
-            //print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
-            return []
-        }
-        //print("로그인한 사용자: \(user.id), 속한 그룹 개수: \(user.groups.count)")
-        return user.groups
+        user?.groups ?? []
     }
     @State private var searchText: String = ""
     @State private var showAddGroup: Bool = false
@@ -103,7 +101,7 @@ struct MainView: View {
         
     }
     private func userlistButton(group: Group) -> some View {
-        NavigationLink(destination: GroupView(group: group)) {
+        NavigationLink(destination: GroupView(group: group, user: user ?? User(id: "default", password: "1234"))) {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "person.2.fill")

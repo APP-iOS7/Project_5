@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class DateStamp { // ✅ 날짜별 완료 여부를 저장하는 개별 모델
+final class DateStamp {
     var date: Date
     var isCompleted: Bool
     init(date: Date, isCompleted: Bool = false) {

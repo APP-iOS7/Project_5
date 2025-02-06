@@ -106,15 +106,27 @@ struct AddNewMissionView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("등록") {
-                        let newMission = Mission(title: title, endDate: endDate, icon: icon, group: group)
+                        let userStamps = group.members?.map { user in
+                            UserStamp(userId: user.id, dateStamp: [DateStamp(date: Date(), isCompleted: false)])
+                        } ?? []
+                        
+                        let newMission = Mission(
+                            title: title,
+                            userStamp: userStamps,
+                            endDate: endDate,
+                            icon: icon,
+                            group: group
+                        )
+
                         modelContext.insert(newMission)
-                        var missionsArray = group.missionTitle ?? []
-                                missionsArray.append(newMission)
-                                group.missionTitle = missionsArray
+
+                        group.missionTitle = (group.missionTitle ?? []) + [newMission]
+
                         try? modelContext.save()
                         dismiss()
                     }
                 }
+
 
             }
         }
