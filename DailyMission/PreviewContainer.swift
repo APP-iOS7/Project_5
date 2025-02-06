@@ -144,75 +144,193 @@ class PreviewContainer {
             "pencil", "book", "clock", "figure.walk", "bicycle",
             "gamecontroller", "paintbrush", "camera", "music.note", "flag"
         ]
-
-        let missions: [(String, Group, Date, String)] = [
+        
+        let missions: [Mission] = [
             // 스터디 그룹
-            ("Swift 공부하기", groups[0],
-                Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today, missionIcons[0]),
-            ("알고리즘 문제 풀기", groups[0],
-                Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today, missionIcons[1]),
-            ("코딩 테스트 연습", groups[0],
-                Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today, missionIcons[2]),
+            Mission(title: "Swift 공부하기",
+                    userStamp: groups[0].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today,
+                    icon: missionIcons[0],
+                    group: groups[0]),
+            
+            Mission(title: "알고리즘 문제 풀기",
+                    userStamp: groups[0].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today,
+                    icon: missionIcons[1],
+                    group: groups[0]),
+            
+            Mission(title: "코딩 테스트 연습",
+                    userStamp: groups[0].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today,
+                    icon: missionIcons[2],
+                    group: groups[0]),
             
             // 운동 그룹
-            ("헬스장 가기", groups[1],
-                Calendar.current.date(byAdding: .day, value: 3, to: today) ?? today, missionIcons[3]),
-            ("달리기 5km", groups[1],
-                Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today, missionIcons[4]),
-            ("팔굽혀펴기 100개", groups[1],
-                Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today, missionIcons[5]),
+            Mission(title: "헬스장 가기",
+                    userStamp: groups[1].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 3, to: today) ?? today,
+                    icon: missionIcons[3],
+                    group: groups[1]),
             
+            Mission(title: "달리기 5km",
+                    userStamp: groups[1].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today,
+                    icon: missionIcons[4],
+                    group: groups[1]),
+            
+            Mission(title: "팔굽혀펴기 100개",
+                    userStamp: groups[1].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today,
+                    icon: missionIcons[5],
+                    group: groups[1]),
             // 여행 계획
-            ("여행 일정 정하기", groups[2],
-                Calendar.current.date(byAdding: .day, value: 14, to: today) ?? today, missionIcons[6]),
-            ("비행기표 예매", groups[2],
-                Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today, missionIcons[7]),
-            ("숙소 예약", groups[2],
-                Calendar.current.date(byAdding: .day, value: 12, to: today) ?? today, missionIcons[8]),
+            Mission(title: "여행 일정 정하기",
+                    userStamp: groups[2].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 14, to: today) ?? today,
+                    icon: missionIcons[6],
+                    group: groups[2]),
+            
+            Mission(title: "비행기표 예매",
+                    userStamp: groups[2].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today,
+                    icon: missionIcons[7],
+                    group: groups[2]),
+            
+            Mission(title: "숙소 예약",
+                    userStamp: groups[2].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 12, to: today) ?? today,
+                    icon: missionIcons[8],
+                    group: groups[2]),
             
             // 독서 모임
-            ("이달의 책 선정", groups[3],
-                Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today, missionIcons[9]),
-            ("책 읽기 목표 설정", groups[3],
-                Calendar.current.date(byAdding: .day, value: 20, to: today) ?? today, missionIcons[10]),
-            ("독후감 공유", groups[3],
-                Calendar.current.date(byAdding: .day, value: 25, to: today) ?? today, missionIcons[11]),
+            Mission(title: "이달의 책 선정",
+                    userStamp: groups[3].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today,
+                    icon: missionIcons[9],
+                    group: groups[3]),
+            
+            Mission(title: "책 읽기 목표 설정",
+                    userStamp: groups[3].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 20, to: today) ?? today,
+                    icon: missionIcons[10],
+                    group: groups[3]),
+            
+            Mission(title: "독후감 공유",
+                    userStamp: groups[3].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 25, to: today) ?? today,
+                    icon: missionIcons[11],
+                    group: groups[3]),
             
             // 요리 연구회
-            ("이번 주 요리 주제 정하기", groups[4],
-                Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
-            ("레시피 연구하기", groups[4],
-                Calendar.current.date(byAdding: .day, value: 9, to: today) ?? today, missionIcons[13]),
-            ("팀별 요리 대회 개최", groups[4],
-                Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today, missionIcons[13]),
+            Mission(title: "이번 주 요리 주제 정하기",
+                    userStamp: groups[4].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[4]),
+            
+            Mission(title: "레시피 연구하기",
+                    userStamp: groups[4].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 9, to: today) ?? today,
+                    icon: missionIcons[13],
+                    group: groups[4]),
+            
+            Mission(title: "팀별 요리 대회 개최",
+                    userStamp: groups[4].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today,
+                    icon: missionIcons[13],
+                    group: groups[4]),
             
             // 프로그래밍 동아리
-            ("오픈소스 프로젝트 기여", groups[5],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
-            ("새로운 언어 배우기", groups[5],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
-            ("해커톤 준비", groups[5],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            Mission(title: "오픈소스 프로젝트 기여",
+                    userStamp: groups[5].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[5]),
+            
+            Mission(title: "새로운 언어 배우기",
+                    userStamp: groups[5].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[5]),
+            
+            Mission(title: "해커톤 준비",
+                    userStamp: groups[5].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[5]),
             
             // 영화 감상회
-            ("이번 달 영화 선정", groups[6],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
-            ("감상문 작성", groups[6],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
-            ("영화 토론회 개최", groups[6],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
+            Mission(title: "이번 달 영화 선정",
+                    userStamp: groups[6].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[6]),
+            
+            Mission(title: "감상문 작성",
+                    userStamp: groups[6].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[6]),
+            
+            Mission(title: "영화 토론회 개최",
+                    userStamp: groups[6].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[6]),
             
             // 사진 촬영 모임
-            ("촬영 테마 정하기", groups[7],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
-            ("야외 촬영 일정 조율", groups[7],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12]),
-            ("사진 편집 워크숍 개최", groups[7],  Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today, missionIcons[12])
+            Mission(title: "촬영 테마 정하기",
+                    userStamp: groups[7].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[7]),
+            
+            Mission(title: "야외 촬영 일정 조율",
+                    userStamp: groups[7].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[7]),
+            
+            Mission(title: "사진 편집 워크숍 개최",
+                    userStamp: groups[7].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
+                    icon: missionIcons[12],
+                    group: groups[7])
+            
         ]
-        
-        for (title, group, endDate, icon) in missions {
-            let userStamps = group.members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? []
-            let mission = Mission(title: title, userStamp: userStamps, endDate: endDate, icon: icon, group: group)
-            container.mainContext.insert(mission)
-            if group.missionTitle == nil {
-                group.missionTitle = []
+        for mission in missions {
+            let userStamps = mission.group?.members?.map {
+                UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)])
+            } ?? []
+            
+            let newMission = Mission(
+                title: mission.title,
+                userStamp: userStamps,
+                endDate: mission.endDate,
+                icon: mission.icon,
+                group: mission.group
+            )
+            
+            container.mainContext.insert(newMission)
+            
+            if newMission.group?.missionTitle == nil {
+                newMission.group?.missionTitle = []
             }
-            group.missionTitle?.append(mission)
+            newMission.group?.missionTitle?.append(newMission)
         }
+        
+        
+        groups[0].missionTitle = [missions[0], missions[1], missions[2]]
+        groups[1].missionTitle = [missions[3], missions[4], missions[5]]
+        groups[2].missionTitle = [missions[6], missions[7], missions[8]]
+        groups[3].missionTitle = [missions[9], missions[10], missions[11]]
+        groups[4].missionTitle = [missions[12], missions[13], missions[14]]
+        groups[5].missionTitle = [missions[15], missions[16], missions[17]]
+        groups[6].missionTitle = [missions[18], missions[19], missions[20]]
+        groups[7].missionTitle = [missions[21], missions[22], missions[23]]
 
+        
         try? container.mainContext.save()
-
+        
     }
 }

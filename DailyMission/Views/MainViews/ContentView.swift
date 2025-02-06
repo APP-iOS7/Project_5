@@ -95,7 +95,7 @@ struct ContentView: View {
     
 }
 
-//#Preview {
-//    ContentView()
-//        .modelContainer(for: Group.self, inMemory: true)
-//}
+#Preview {
+    ContentView()
+        .modelContainer(for: Group.self, inMemory: true)
+}

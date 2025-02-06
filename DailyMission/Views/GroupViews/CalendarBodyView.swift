@@ -29,6 +29,7 @@ struct CalenderBodyView: View {
         }
         .onAppear(perform: {
             clickedDate = Date.now
+            updateMissionsDateStamp()
         })
         .gesture(
             DragGesture()
@@ -45,7 +46,23 @@ struct CalenderBodyView: View {
                 }
         )
     }
-    
+    private func updateMissionsDateStamp() {
+            for mission in groupMission {
+                if let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }) {
+                    if userStamp.dateStamp.isEmpty {
+                        print("Mission: \(mission.title) has empty dateStamp. Adding clickedDate...")
+                        userStamp.dateStamp.append(DateStamp(date: clickedDate ?? Date(), isCompleted: false))
+                        
+                        do {
+                            try modelContext.save()
+                            print("Successfully added default dateStamp.")
+                        } catch {
+                            print("Failed to save dateStamp: \(error.localizedDescription)")
+                        }
+                    }
+                }
+            }
+        }
     // MARK: - 헤더 뷰
     private var headerView: some View {
         VStack {
@@ -95,22 +112,32 @@ struct CalenderBodyView: View {
         }
     }
     
-    private func completedRatio (_ user: User, _ missions: [Mission], _ date: Date) -> Double {
-        var completedCount : Double = 0.0
-        var dateMissionCount : Double = 0.0
-        var dateStamp : [DateStamp]
-        for mission in missions {
-            if let index = mission.userStamp?.firstIndex(where: {$0.userId == user.id}) {
-                dateStamp = mission.userStamp?[index].dateStamp ?? []
-                if let index2 = dateStamp.firstIndex(where: { $0.date.isSameDate(date: date)}) {
-                    dateMissionCount += 1
-                    if dateStamp[index2].isCompleted { completedCount += 1 }
+    private func completedRatio(_ user: User, _ missions: [Mission], _ date: Date) -> Double {
+
+        var completedCount: Double = 0.0
+            var dateMissionCount: Double = 0.0
+            var dateStamp: [DateStamp]
+            
+            for mission in missions {
+                if let index = mission.userStamp?.firstIndex(where: { $0.userId == user.id }) {
+                    dateStamp = mission.userStamp?[index].dateStamp ?? []
+                    
+                    if !dateStamp.contains(where: { $0.date.isSameDate(date: date) }) {
+                        mission.userStamp?[index].dateStamp.append(DateStamp(date: date, isCompleted: false))
+                        try? modelContext.save()
+                    }
+
+                    if let index2 = dateStamp.firstIndex(where: { $0.date.isSameDate(date: date) }) {
+                        dateMissionCount += 1
+                        if dateStamp[index2].isCompleted {
+                            completedCount += 1
+                        }
+                    }
                 }
             }
+            
+            return dateMissionCount > 0 ? (completedCount / dateMissionCount) : 0.0
         }
-        let completedRatio = completedCount / dateMissionCount
-        return completedRatio
-    }
     
 
     
@@ -191,18 +218,19 @@ private struct NumberView: View {
                 )))
                 .foregroundColor(colorFore)
             if completedRatio == 1 {
-                Circle()
-                    .fill(Color.blue)
-                    .frame(width: 8, height: 8)
-            } else if completedRatio == 0 {
-                Circle()
-                    .fill(Color.gray.opacity(0.4))
-                    .frame(width: 8, height: 8)
-            } else {
-                Circle()
-                    .fill(Color.red.opacity(completedRatio))
-                    .frame(width: 8, height: 8)
-            }
+                            Circle()
+                                .fill(Color.blue)
+                                .frame(width: 8, height: 8)
+                        } else if completedRatio == 0 {
+                            Circle()
+                                .fill(Color.gray.opacity(0.4))
+                                .frame(width: 8, height: 8)
+                        } else {
+                            Circle()
+                                .fill(Color.red.opacity(completedRatio))
+                                .frame(width: 8, height: 8)
+                        }
+            
         }
     }
 }

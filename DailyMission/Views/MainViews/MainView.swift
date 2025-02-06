@@ -54,6 +54,7 @@ struct MainView: View {
                     ForEach(usergroups, id: \.self) { group in
                         userlistButton(group: group)
                         
+
                     }
                     .onDelete(perform: deleteGroup)
                 }
@@ -115,6 +116,15 @@ struct MainView: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.black)
                 }
+//                if let members = group.members, !members.isEmpty {
+//                    ForEach(members, id: \.id) { mem in
+//                        Text("\(mem.id)") // mem.id가 존재하는지 확인
+//                    }
+//                } else {
+//                    Text("멤버 없음")
+//                        .foregroundColor(.gray)
+//                }
+
                 Spacer()
                 Text(group.name)
                     .font(.headline)

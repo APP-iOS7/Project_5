@@ -14,9 +14,7 @@ struct ChartView: View {
     var groupColor : Color
     var user: User
     @Query private var missions: [Mission]
-    var filteredMissions: [Mission] {
-        missions.filter { $0.group?.id == group.id }
-    }
+    @State private var filteredMissionsState: [Mission] = []
     
     @State var clickedDate: Date = Date()
 //    var completedMissionRatio: Double {
