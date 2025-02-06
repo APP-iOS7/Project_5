@@ -68,6 +68,8 @@ struct ChartView: View {
                                 Text(sortedMemberRatios[i].id)
                                     .font(.caption)
                                     .foregroundColor(.black)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
                             }
                         }
                     }
