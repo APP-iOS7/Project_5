@@ -95,9 +95,12 @@ struct ChartView: View {
     }
     
     private func memberMission (_ user: User, _ group: Group) -> [Mission] {
-        if let index = user.groups.firstIndex(where: { $0.id == group.id }) {
-            return user.groups[index].missionTitle!
-        } else { return [] }
+        guard let groups = user.groups,
+                  let index = groups.firstIndex(where: { $0.id == group.id }),
+                  let missions = groups[index].missionTitle else {
+                return []
+            }
+            return missions
     }
     private func updateFilteredMissions() {
         DispatchQueue.main.async {

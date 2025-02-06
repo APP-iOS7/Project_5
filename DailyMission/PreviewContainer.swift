@@ -17,7 +17,7 @@ class PreviewContainer {
     
     init() {
         let schema = Schema([
-            User.self, Group.self, Mission.self, DateStamp.self
+            User.self, Group.self, Mission.self, DateStamp.self, UserStamp.self ,UserGroup.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema,
                                                     isStoredInMemoryOnly: false,
@@ -53,7 +53,6 @@ class PreviewContainer {
             Group(
                 name: "스터디 그룹",
                 missionTitle: [],
-                members: [users[1], users[2]],
                 category: "공부",
                 
                 color: "blue",
@@ -63,7 +62,6 @@ class PreviewContainer {
             Group(
                 name: "운동 그룹",
                 missionTitle: [],
-                members: [users[0], users[1]],
                 category: "운동",
                 
                 color: "red",
@@ -73,7 +71,6 @@ class PreviewContainer {
             Group(
                 name: "여행 계획",
                 missionTitle: [],
-                members: [users[0], users[2]],
                 category: "여행",
                 
                 color: "green",
@@ -83,7 +80,6 @@ class PreviewContainer {
             Group(
                 name: "독서 모임",
                 missionTitle: [],
-                members: [],
                 category: "취미",
                 color: "purple",
                 dueDate: calendar.date(byAdding: .day, value: 20, to: today),
@@ -92,7 +88,6 @@ class PreviewContainer {
             Group(
                 name: "요리 연구회",
                 missionTitle: [],
-                members: [],
                 category: "요리",
                 color: "orange",
                 dueDate: calendar.date(byAdding: .day, value: 15, to: today),
@@ -101,7 +96,6 @@ class PreviewContainer {
             Group(
                 name: "프로그래밍 동아리",
                 missionTitle: [],
-                members: [],
                 category: "코딩",
                 color: "yellow",
                 dueDate: calendar.date(byAdding: .day, value: 30, to: today),
@@ -110,7 +104,6 @@ class PreviewContainer {
             Group(
                 name: "영화 감상회",
                 missionTitle: [],
-                members: [],
                 category: "문화",
                 
                 color: "brown",
@@ -120,7 +113,6 @@ class PreviewContainer {
             Group(
                 name: "사진 촬영 모임",
                 missionTitle: [],
-                members: [],
                 category: "사진",
                 
                 color: "gray",
@@ -133,11 +125,20 @@ class PreviewContainer {
             container.mainContext.insert(group)
         }
         try? container.mainContext.save()
+        let userGroups: [UserGroup] = [
+            UserGroup(user: users[0], group: groups[1]),
+            UserGroup(user: users[0], group: groups[2]),
+            UserGroup(user: users[1], group: groups[0]),
+            UserGroup(user: users[1], group: groups[1]),
+            UserGroup(user: users[2], group: groups[0]),
+            UserGroup(user: users[2], group: groups[2])
+        ]
         
-        users[0].groups = [groups[1], groups[2]]
-        users[1].groups = [groups[0], groups[1]]
-        users[2].groups = [groups[0], groups[2]]
+        for userGroup in userGroups {
+            container.mainContext.insert(userGroup)
+        }
         try? container.mainContext.save()
+        
         
         let missionIcons = [
             "star", "heart", "flame", "bolt", "leaf",
@@ -148,159 +149,277 @@ class PreviewContainer {
         let missions: [Mission] = [
             // 스터디 그룹
             Mission(title: "Swift 공부하기",
-                    userStamp: groups[0].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map { userGroup in
+                        let userStamp = UserStamp(userId: userGroup.user.id, dateStamp: [DateStamp(date: today, isCompleted: false)])
+                            return userStamp
+                        },
                     endDate: Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today,
                     icon: missionIcons[0],
                     group: groups[0]),
             
             Mission(title: "알고리즘 문제 풀기",
-                    userStamp: groups[0].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today,
                     icon: missionIcons[1],
                     group: groups[0]),
             
             Mission(title: "코딩 테스트 연습",
-                    userStamp: groups[0].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today,
                     icon: missionIcons[2],
                     group: groups[0]),
             
             // 운동 그룹
             Mission(title: "헬스장 가기",
-                    userStamp: groups[1].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 3, to: today) ?? today,
                     icon: missionIcons[3],
                     group: groups[1]),
             
             Mission(title: "달리기 5km",
-                    userStamp: groups[1].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 5, to: today) ?? today,
                     icon: missionIcons[4],
                     group: groups[1]),
             
             Mission(title: "팔굽혀펴기 100개",
-                    userStamp: groups[1].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 7, to: today) ?? today,
                     icon: missionIcons[5],
                     group: groups[1]),
             // 여행 계획
             Mission(title: "여행 일정 정하기",
-                    userStamp: groups[2].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 14, to: today) ?? today,
                     icon: missionIcons[6],
                     group: groups[2]),
             
             Mission(title: "비행기표 예매",
-                    userStamp: groups[2].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 10, to: today) ?? today,
                     icon: missionIcons[7],
                     group: groups[2]),
             
             Mission(title: "숙소 예약",
-                    userStamp: groups[2].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 12, to: today) ?? today,
                     icon: missionIcons[8],
                     group: groups[2]),
             
             // 독서 모임
             Mission(title: "이달의 책 선정",
-                    userStamp: groups[3].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today,
                     icon: missionIcons[9],
                     group: groups[3]),
             
             Mission(title: "책 읽기 목표 설정",
-                    userStamp: groups[3].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 20, to: today) ?? today,
                     icon: missionIcons[10],
                     group: groups[3]),
             
             Mission(title: "독후감 공유",
-                    userStamp: groups[3].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 25, to: today) ?? today,
                     icon: missionIcons[11],
                     group: groups[3]),
             
             // 요리 연구회
             Mission(title: "이번 주 요리 주제 정하기",
-                    userStamp: groups[4].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[4]),
             
             Mission(title: "레시피 연구하기",
-                    userStamp: groups[4].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 9, to: today) ?? today,
                     icon: missionIcons[13],
                     group: groups[4]),
             
             Mission(title: "팀별 요리 대회 개최",
-                    userStamp: groups[4].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 15, to: today) ?? today,
                     icon: missionIcons[13],
                     group: groups[4]),
             
             // 프로그래밍 동아리
             Mission(title: "오픈소스 프로젝트 기여",
-                    userStamp: groups[5].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[5]),
             
             Mission(title: "새로운 언어 배우기",
-                    userStamp: groups[5].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[5]),
             
             Mission(title: "해커톤 준비",
-                    userStamp: groups[5].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[5]),
             
             // 영화 감상회
             Mission(title: "이번 달 영화 선정",
-                    userStamp: groups[6].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[6]),
             
             Mission(title: "감상문 작성",
-                    userStamp: groups[6].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[6]),
             
             Mission(title: "영화 토론회 개최",
-                    userStamp: groups[6].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[6]),
             
             // 사진 촬영 모임
             Mission(title: "촬영 테마 정하기",
-                    userStamp: groups[7].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[7]),
             
             Mission(title: "야외 촬영 일정 조율",
-                    userStamp: groups[7].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[7]),
             
             Mission(title: "사진 편집 워크숍 개최",
-                    userStamp: groups[7].members?.map { UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)]) } ?? [],
+                    userStamp: groups[0].groupUsers.map {
+                        let userStamp = UserStamp(userId: $0.user.id)
+                        userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
+                        container.mainContext.insert(userStamp)
+                        return userStamp
+                    },
                     endDate: Calendar.current.date(byAdding: .day, value: 6, to: today) ?? today,
                     icon: missionIcons[12],
                     group: groups[7])
             
         ]
         for mission in missions {
-            let userStamps = mission.group?.members?.map {
-                UserStamp(userId: $0.id, dateStamp: [DateStamp(date: today, isCompleted: false)])
+            let userStamps = mission.group?.groupUsers.map { userGroup in
+                UserStamp(userId: userGroup.user.id, dateStamp: [DateStamp(date: today, isCompleted: false)])
             } ?? []
             
             let newMission = Mission(
@@ -328,7 +447,7 @@ class PreviewContainer {
         groups[5].missionTitle = [missions[15], missions[16], missions[17]]
         groups[6].missionTitle = [missions[18], missions[19], missions[20]]
         groups[7].missionTitle = [missions[21], missions[22], missions[23]]
-
+        
         
         try? container.mainContext.save()
         

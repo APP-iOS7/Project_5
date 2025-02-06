@@ -124,7 +124,6 @@ struct GroupAddView: View {
                     Button("추가") {
                         let group = Group(name: name,
                                           missionTitle: [],
-                                          members: [],
                                           category: category,
                                           
                                           color:selectedColor,

@@ -16,6 +16,7 @@ final class Mission {
     var createdAt: Date  = Date() // mission 생성 날짜
     var userStamp: [UserStamp]? = [] // 날짜 : 날짜별 완료 여부를 표시
     var group: Group?
+        
     
     init(
         title: String,
@@ -23,7 +24,7 @@ final class Mission {
         endDate: Date? = nil,
         icon: String? = nil,
         _ createdAt: Date = Date(),
-        group: Group?
+        group: Group? = nil
     ) {
         self.title = title
         self.createdAt = createdAt

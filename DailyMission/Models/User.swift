@@ -12,11 +12,15 @@ import SwiftData
 final class User {
     var id: String
     var password: String
-    var groups: [Group]
+    @Relationship(deleteRule: .cascade, inverse: \UserGroup.user)
+    var userGroups: [UserGroup] = []
     
-    init(id: String, password: String, groups: [Group] = []) {
+    var groups: [Group]? {
+            return userGroups.map { $0.group }
+        }
+    
+    init(id: String, password: String) {
         self.id = id
         self.password = password
-        self.groups = groups
     }
 }
