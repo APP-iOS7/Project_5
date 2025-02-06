@@ -21,6 +21,8 @@ struct LoginView: View {
     @State private var loggedInUser: User?
     @State private var newMissionTitle: String = ""
     @State private var isLoggedIn: Bool = false
+    @State private var showAlert_wrong = false
+    @State private var showAlert_blank = false
     
     var body: some View {
         ZStack {
@@ -159,20 +161,41 @@ struct LoginView: View {
             .padding()
         }
         .background(Color(red: 242/256, green: 234/256, blue: 221/256))
+        .alert("", isPresented: $showAlert_wrong, actions: {
+            Button("확인", role: .cancel) {}
+        }, message: {
+            Text("아이디 또는 비밀번호가 맞지 않습니다")
+        })
+        .alert("", isPresented: $showAlert_blank, actions: {
+            Button("확인", role: .cancel) {}
+        }, message: {
+            Text("아이디 또는 비밀번호가 입력되지 않았습니다")
+        })
 
     }
     
     
     private func login() {
-        if let storedPassword = members[userId], storedPassword == password {
-            loggedInUser = User(id: userId, password: storedPassword)
-            member = userId
-            isLoggedIn = true
-            userId = ""
-            password = ""
-        } else {
-            print("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.")
+        if userId == "" || password == ""{
+            showAlert_blank.toggle()
+            print("로그인 실패: 아이디 또는 비밀번호가 입력되지 않았습니다.")
         }
+        else {
+            
+            if let storedPassword = members[userId], storedPassword == password {
+                loggedInUser = User(id: userId, password: storedPassword)
+                member = userId
+                isLoggedIn = true
+                userId = ""
+                password = ""
+            } else {
+                showAlert_wrong.toggle()
+                print("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.")
+            }
+            
+        }
+        
+
     }
     
 }
