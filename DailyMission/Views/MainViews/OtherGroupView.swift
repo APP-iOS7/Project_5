@@ -21,10 +21,10 @@ struct OtherGroupView: View {
         return user.groups
     }
     
-    var group : Group
+    var selectedgroup : Group
     @Query private var missions: [Mission]
     var filteredMissions: [Mission] {
-        missions.filter { $0.group?.id == group.id }
+        missions.filter { $0.group?.id == selectedgroup.id }
     }
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
@@ -44,7 +44,7 @@ struct OtherGroupView: View {
             Divider()
             VStack(alignment: .leading, spacing: 15) {
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("\(group.name)에서 하는 일!!")
+                    Text("\(selectedgroup.name)에서 하는 일!!")
                         .font(.title)
                         .fontWeight(.bold)
                     ForEach(filteredMissions) { mission in
@@ -52,7 +52,7 @@ struct OtherGroupView: View {
                             HStack {
                                 Image(systemName: "checkmark")
                                     .font(.body)
-                                    .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
+                                    .foregroundColor(colorMap[selectedgroup.color ?? "blue"] ?? .blue)
                                 
                                 
                                 Text(" \(mission.title)")
@@ -68,7 +68,7 @@ struct OtherGroupView: View {
                     Text("카테고리")
                         .font(.title)
                         .fontWeight(.bold)
-                    Text("\(group.category)")
+                    Text("\(selectedgroup.category)")
                 }
                 Rectangle()
                     .frame(height: 20)
@@ -77,7 +77,7 @@ struct OtherGroupView: View {
                     Text("기간")
                         .font(.title)
                         .fontWeight(.bold)
-                    if let dueDate = group.dueDate {
+                    if let dueDate = selectedgroup.dueDate {
                         Text(formattedDate(dueDate))
                             .font(.headline)
                     } else {
@@ -89,12 +89,11 @@ struct OtherGroupView: View {
                 Spacer()
                 Button(action: {
                     joinGroup()
-                    dismiss()
                 }) {
                     Text(isJoined ? "이미 참여한 그룹입니다" : "그룹 참여")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(isJoined ? Color.gray : colorMap[group.color ?? "blue"] ?? .blue)
+                        .background(isJoined ? Color.gray : colorMap[selectedgroup.color ?? "blue"] ?? .blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -105,7 +104,7 @@ struct OtherGroupView: View {
             .onAppear {
                 checkIfJoined()
             }
-            .navigationTitle(group.name)
+            .navigationTitle(selectedgroup.name)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("취소") {
@@ -119,23 +118,27 @@ struct OtherGroupView: View {
     }
     private func checkIfJoined() {
         if let user = users.first(where: { $0.id == loggedInUser }) {
-            isJoined = user.groups.contains(where: { $0.id == group.id })
+            isJoined = user.groups.contains(where: { $0.id == selectedgroup.id })
         }
     }
     
     private func joinGroup() {
         if let user = users.first(where: { $0.id == loggedInUser }) {
-            if !user.groups.contains(where: { $0.id == group.id }) {
-                user.groups.append(group) // 그룹 추가
-                try? modelContext.save()  // 변경 사항 저장
-                isJoined = true // UI 업데이트
+            if !user.groups.contains(where: { $0.id == selectedgroup.id }) {
+                user.groups.append(selectedgroup)
+                if selectedgroup.members == nil {
+                    selectedgroup.members = []
+                }
+                selectedgroup.members?.append(user)
+                try? modelContext.save()
+                isJoined = true
             }
         }
     }
     func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy년 M월 d일 E요일"
+        formatter.dateFormat = "~ yyyy년 M월 d일 E요일"
         return formatter.string(from: date)
     }
     

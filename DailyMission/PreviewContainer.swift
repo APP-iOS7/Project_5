@@ -101,7 +101,7 @@ class PreviewContainer {
                 category: "문화",
                 
                 color: "brown",
-                dueDate: calendar.date(byAdding: .day, value: 25, to: today)
+                dueDate: nil
             ),
             Group(
                 name: "사진 촬영 모임",
@@ -109,7 +109,7 @@ class PreviewContainer {
                 category: "사진",
                 
                 color: "gray",
-                dueDate: calendar.date(byAdding: .day, value: 18, to: today)
+                dueDate: nil
             )
         ]
         
