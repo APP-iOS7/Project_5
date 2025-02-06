@@ -66,14 +66,33 @@ struct CalenderBodyView: View {
     // MARK: - 헤더 뷰
     private var headerView: some View {
         VStack {
-            Text(month, formatter: Self.dateFormatter)
-                .font(.title)
-                .padding(.bottom)
-            
+            HStack {
+                Button(action: {
+                    changeMonth(by: -1)
+                }) {
+                    Image(systemName: "arrowtriangle.left.fill")
+                        .foregroundStyle(groupColor)
+                }
+                Text(month, formatter: Self.dateFormatter)
+                    .font(.body)
+                Button(action: {
+                    changeMonth(by: 1)
+                }) {
+                    Image(systemName: "arrowtriangle.right.fill")
+                        .foregroundStyle(groupColor)
+                }
+            }
+            .padding(.bottom, 5)
             HStack {
                 ForEach(Self.weekdaySymbols, id: \.self) { symbol in
-                    Text(symbol)
-                        .frame(maxWidth: .infinity)
+                        if symbol == "S" {
+                            Text(symbol)
+                                .frame(maxWidth: .infinity)
+                            .foregroundStyle(.red)
+                        } else {
+                            Text(symbol)
+                                .frame(maxWidth: .infinity)
+                        }
                 }
             }
             .padding(.bottom, 10)
