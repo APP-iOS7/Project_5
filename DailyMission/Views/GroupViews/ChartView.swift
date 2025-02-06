@@ -48,7 +48,7 @@ struct ChartView: View {
             
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(group.members!) { member in
-                    var completedRatio = completedRatio(memberMission(member, group), clickedDate)
+                    @State var completedRatio = completedRatio(memberMission(member, group), clickedDate)
                     listButton(title: member.id, color: groupColor, ratio: completedRatio)
                 }
             }
@@ -92,7 +92,7 @@ struct ChartView: View {
         var completedCount : Double = 0.0
         var dateMissionCount : Double = 0.0
         for mission in missions {
-            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
+            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date)}) {
                 dateMissionCount += 1
                 if mission.dateStamp![index].isCompleted { completedCount += 1 }
             }

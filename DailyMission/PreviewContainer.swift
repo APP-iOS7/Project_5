@@ -115,10 +115,16 @@ class PreviewContainer {
             container.mainContext.insert(group)
         }
         try? container.mainContext.save()
-        
+        //1.그룹 새로 생성 시 할 일
+        //유저에 그룹 추가
         users[0].groups = [groups[1], groups[2]]
         users[1].groups = [groups[0], groups[1]]
         users[2].groups = [groups[0], groups[2]]
+        
+        //그룹에 멤버 추가
+        groups[0].members = [users[1], users[2]]
+        groups[1].members = [users[0], users[1]]
+        groups[2].members = [users[0], users[2]]
         try? container.mainContext.save()
         
         let missions: [(String, Group, [DateStamp])] = [
@@ -162,9 +168,11 @@ class PreviewContainer {
             ("야외 촬영 일정 조율", groups[7], [DateStamp(date: today, isCompleted: false)]),
             ("사진 편집 워크숍 개최", groups[7], [DateStamp(date: today, isCompleted: false)])
         ]
-        
+        //2. 미션 생성 시 해야 할일
+        //미션 추가 + 그룹에 미션타이틀 추가
         for (title, group, dateStamp) in missions {
             let mission = Mission(title: title, dateStamp: dateStamp, group: group)
+            group.missionTitle?.append(mission)
             container.mainContext.insert(mission)
         }
         
