@@ -33,6 +33,11 @@ class PreviewContainer {
     
     func insertPreviewData() {
         let today = Date()
+        let existingUsers = try? container.mainContext.fetch(FetchDescriptor<User>())
+        if let existingUsers = existingUsers, !existingUsers.isEmpty {
+            print("📌 기존 데이터가 존재합니다. 새로운 데이터 삽입을 건너뜁니다.")
+            return
+        }
         let users: [User] = [
             User(id: "minseo", password: "1234"),
             User(id: "hajin", password: "1234"),

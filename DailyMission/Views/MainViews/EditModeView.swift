@@ -76,17 +76,7 @@ struct EditModeView: View {
     private func editRow(group: Group) -> some View {
         print("editRow 실행: \(group.name)")
         return HStack {
-            Button(action: {
-                groupToDelete = group
-                showDeleteAlert = true
-                
-            }) {
-                Image(systemName: "minus.circle.fill")
-                    .foregroundColor(.red)
-                    .font(.system(size: minusSize))
-            }
-            .buttonStyle(PlainButtonStyle())
-            .contentShape(Rectangle())
+            
             
             Image(systemName: "person.2.fill")
                 .resizable()
@@ -100,7 +90,17 @@ struct EditModeView: View {
                 .foregroundColor(.black)
             
             Spacer()
-            
+            Button(action: {
+                groupToDelete = group
+                showDeleteAlert = true
+                
+            }) {
+                Text("나가기")
+                    .foregroundColor(.red)
+                    .font(.system(size: 18))
+            }
+            .buttonStyle(PlainButtonStyle())
+            .contentShape(Rectangle())
             
         }
         .listRowBackground(Color.white)
