@@ -20,7 +20,7 @@ final class Group {
     var dueDate: Date?
     var createdAt: Date  = Date()
     
-    init(name: String, missionTitle: [Mission]?, members: [User], category: String,  color: String?, dueDate: Date?, _ createdAt: Date) {
+    init(name: String, missionTitle: [Mission]?, members: [User], category: String,  color: String?, dueDate: Date?, createdAt: Date) {
         self.name = name
         self.missionTitle = missionTitle
         self.members = members

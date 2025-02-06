@@ -31,5 +31,6 @@ final class Mission {
         self.endDate = endDate
                 self.icon = icon
         self.group = group
+        
     }
 }
