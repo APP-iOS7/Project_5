@@ -124,7 +124,7 @@ struct CalenderBodyView: View {
                                     clickedDate = date
                                 }
                             }
-                        
+
                     }
                 }
             }
@@ -140,12 +140,10 @@ struct CalenderBodyView: View {
             for mission in missions {
                 if let index = mission.userStamp?.firstIndex(where: { $0.userId == user.id }) {
                     dateStamp = mission.userStamp?[index].dateStamp ?? []
-                    
                     if !dateStamp.contains(where: { $0.date.isSameDate(date: date) }) {
                         mission.userStamp?[index].dateStamp.append(DateStamp(date: date, isCompleted: false))
                         try? modelContext.save()
                     }
-
                     if let index2 = dateStamp.firstIndex(where: { $0.date.isSameDate(date: date) }) {
                         dateMissionCount += 1
                         if dateStamp[index2].isCompleted {
@@ -154,30 +152,8 @@ struct CalenderBodyView: View {
                     }
                 }
             }
-            
             return dateMissionCount > 0 ? (completedCount / dateMissionCount) : 0.0
         }
-    
-//    private func completedCount (_ missions: [Mission], _ date: Date) -> Int {
-//            var count = 0
-//            for mission in missions {
-//                if let dateStamp = mission.dateStamp?,
-//                   let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
-//                    count += 1
-//                }
-//            }
-//            return count
-//        }
-//        
-//        private func dateMissionCount (_ missions: [Mission], _ date: Date) -> Int {
-//            var count = 0
-//            for mission in missions {
-//                if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
-//                    count += 1
-//                }
-//            }
-//            return count
-//        }
 }
 
 // MARK: - 일자 셀 뷰
@@ -247,7 +223,7 @@ private struct NumberView: View {
                         .frame(width: 8, height: 8)
                 } else if completedRatio == 0 {
                     Circle()
-                        .fill(Color.gray.opacity(0.4))
+                        .fill(Color.white)
                         .frame(width: 8, height: 8)
                 } else {
                     Circle()
