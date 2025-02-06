@@ -51,18 +51,19 @@ struct ChartView: View {
                     .foregroundColor(.gray)
             }
             Spacer()
-            
+            Text("월별 순위")
             if let members = group.members, !members.isEmpty {
                 HStack {
                     //Text("\(selectedMonth)월")
                     HStack(alignment: .bottom, spacing: 20) {
                         let sortedMemberRatios = memberRatios.sorted { $0.ratio > $1.ratio }
+                        let barWidth = (UIScreen.main.bounds.width - 80) / CGFloat(sortedMemberRatios.count)
                         ForEach(sortedMemberRatios.indices, id: \.self) { i in
                             VStack {
                                 
                                 Rectangle()
                                     .fill(groupColor)
-                                    .frame(width: (UIScreen.main.bounds.width - 200) / CGFloat(sortedMemberRatios.count),
+                                    .frame(width: barWidth,
                                            height: CGFloat(sortedMemberRatios[i].ratio) * 2)
                                 
                                 Text(sortedMemberRatios[i].id)
@@ -73,7 +74,7 @@ struct ChartView: View {
                             }
                         }
                     }
-                    .frame(width: UIScreen.main.bounds.width - 200)
+                    .frame(width: UIScreen.main.bounds.width - 40)
                 }
                 
                 
@@ -104,6 +105,7 @@ struct ChartView: View {
                 let normalizedRatio = (maxRatio > 0) ? (member.ratio / maxRatio) * 100 : 0
                 return (id: member.id, ratio: normalizedRatio)
             }
+            print("\(memberRatios)")
         }
     }
     private func totalMonthlyRatio(member: User, selectedMonth: Int) -> Double {
@@ -113,7 +115,7 @@ struct ChartView: View {
         
         let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))!
         var totalRatio: Double = 0.0
-        
+        print("\(member.id)")
         for day in range {
             if let date = calendar.date(byAdding: .day, value: day - 1, to: startOfMonth) {
                 let missionsForMember = memberMission(member, group)
