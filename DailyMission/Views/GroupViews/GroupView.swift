@@ -13,6 +13,7 @@ struct GroupView: View {
     @Environment(\.dismiss) private var dismiss
     
     var group : Group
+    var user : User
     @Query private var missions: [Mission]
     var filteredMissions: [Mission] {
         missions.filter { $0.group?.id == group.id }
@@ -68,12 +69,17 @@ struct GroupView: View {
             .padding()
         }
     }
-    
+    //미션->유저스탬프->dateStamp 에서 뉴 dateStamp 추가
     private func MakeDailyTimeStamp(missions: [Mission]) {
+        var dateStamp : [DateStamp]
         for mission in missions {
-            if ((mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: Date.now) })) == nil) {
-                mission.dateStamp?.append(DateStamp(date: Date.now, isCompleted: false))
+            if let index = mission.userStamp?.firstIndex(where: {$0.userId == user.id}) {
+                dateStamp = mission.userStamp?[index].dateStamp ?? []
+                if (((dateStamp.firstIndex(where: { $0.date.isSameDate(date: Date.now) })) != nil)) {
+                    mission.userStamp?[index].dateStamp.append(DateStamp(date: Date.now, isCompleted: false))
+                }
             }
+            
         }
     }
 }
