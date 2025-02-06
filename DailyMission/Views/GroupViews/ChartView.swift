@@ -17,42 +17,33 @@ struct ChartView: View {
     @State private var filteredMissionsState: [Mission] = []
     
     @State var clickedDate: Date = Date()
-//    var completedMissionRatio: Double {
-//        var completedCount : Double = 0.0
-//        var dateMissionCount : Double = 0.0
-//        for mission in missions {
-//            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
-//                dateMissionCount += 1
-//                if mission.dateStamp![index].isCompleted == true { completedCount += 1 }
-//            }
-//        }
-//        return completedCount / dateMissionCount
-//    }
-
-//    @AppStorage("loginMember") var member1: String = "minseo"
-//    @AppStorage("loginMember") var member2: String = "hajin"
-//    @AppStorage("loginMember") var member3: String = "junho"
+    
     
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
-        VStack {
-            Text(clickedDate.formatted(
-                Date.FormatStyle()
-                    .year()
-                    .month()
-                    .day()
-            ))
+        VStack(alignment: .leading) {
+            Text(formattedDate(clickedDate))
             
-            LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(group.members!) { member in
-                    var completedRatio = completedRatio(member, memberMission(member, group), clickedDate)
-                    listButton(title: member.id, color: groupColor, ratio: completedRatio)
+            if let members = group.members, !members.isEmpty {
+                LazyVGrid(columns: columns, spacing: 15) {
+                    ForEach(members) { member in
+                        let missionsForMember = memberMission(member, group)
+                        let completedRatio = completedRatio(member, missionsForMember, clickedDate)
+                        listButton(title: member.id, color: groupColor, ratio: completedRatio)
+                    }
                 }
+            } else {
+                Text("멤버가 없습니다.")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
             }
             Spacer()
+            Spacer()
         }
-        
+        .onAppear {
+            updateFilteredMissions()
+        }
     }
     private func listButton(title: String, color: Color, ratio: Double) -> some View {
         HStack(alignment: .top) {
@@ -107,6 +98,17 @@ struct ChartView: View {
         if let index = user.groups.firstIndex(where: { $0.id == group.id }) {
             return user.groups[index].missionTitle!
         } else { return [] }
+    }
+    private func updateFilteredMissions() {
+        DispatchQueue.main.async {
+            self.filteredMissionsState = missions.filter { $0.group?.id == self.group.id }
+        }
+    }
+    func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy년 M월 d일 E요일"
+        return formatter.string(from: date)
     }
 }
 
