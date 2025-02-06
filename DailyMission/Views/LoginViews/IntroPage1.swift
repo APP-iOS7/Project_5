@@ -8,8 +8,20 @@
 import SwiftUI
 
 struct IntroPage1: View {
+    
+    private var string: String = "Daily Mission~ Let it go!!!"
+    
     var body: some View {
-        Text("Intro Page 1")
+        VStack {
+            Image("logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(EdgeInsets(top: 0, leading: 30, bottom: 30, trailing: 30))
+            
+            Text(string)
+                .font(.title)
+                .fontWeight(.semibold)
+        }
     }
 }
 
