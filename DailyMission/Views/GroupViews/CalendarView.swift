@@ -69,6 +69,7 @@ struct CalendarView: View {
             //달력
             
         }
+        .onChange(of: missions, { updateFilteredMissions() })
         .onAppear {
             updateFilteredMissions()
         }
@@ -85,9 +86,15 @@ struct CalendarView: View {
                              ( compareDate(group.dueDate!, Date.now) >= 0  && mission.endDate == nil) )
                         {
                             print("Adding missing dateStamp for clickedDate: \(clickedDate)")
-                            userStamp.dateStamp.append(DateStamp(date: Date.now, isCompleted: false)) // 유저 데이트스탬프 생성
+                            userStamp.dateStamp.append(DateStamp(date: Date.now, isCompleted: false)) // 데이트스탬프 생성
                             try? self.modelContext.save()
                         }
+                    } else if let _ = group.dueDate,
+                              ( compareDate(mission.endDate!, Date.now) >= 0  && mission.endDate != nil) ||
+                                ( compareDate(group.dueDate!, Date.now) >= 0  && mission.endDate == nil) { //지금 유저 스탬프에 없을때, 오늘이 마감일 전이라면 유저 스탬프 새로 발행
+                        let userStamp = UserStamp(userId: user.id, dateStamp: [DateStamp(date: Date.now, isCompleted: false)])
+                        mission.userStamp?.append(userStamp)
+                        try? self.modelContext.save()
                     }
                 }
             }
