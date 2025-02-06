@@ -29,7 +29,7 @@ struct CalenderBodyView: View {
         }
         .onAppear(perform: {
             clickedDate = Date.now
-            updateMissionsDateStamp()
+//            updateMissionsDateStamp()
         })
         .gesture(
             DragGesture()
@@ -46,23 +46,23 @@ struct CalenderBodyView: View {
                 }
         )
     }
-    private func updateMissionsDateStamp() {
-            for mission in groupMission {
-                if let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }) {
-                    if userStamp.dateStamp.isEmpty {
-                        print("Mission: \(mission.title) has empty dateStamp. Adding clickedDate...")
-                        userStamp.dateStamp.append(DateStamp(date: clickedDate ?? Date(), isCompleted: false))
-                        
-                        do {
-                            try modelContext.save()
-                            print("Successfully added default dateStamp.")
-                        } catch {
-                            print("Failed to save dateStamp: \(error.localizedDescription)")
-                        }
-                    }
-                }
-            }
-        }
+//    private func updateMissionsDateStamp() {
+//            for mission in groupMission {
+//                if let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }) {
+//                    if userStamp.dateStamp.isEmpty {
+//                        print("Mission: \(mission.title) has empty dateStamp. Adding clickedDate...")
+//                        userStamp.dateStamp.append(DateStamp(date: clickedDate ?? Date(), isCompleted: false))
+//                        
+//                        do {
+//                            try modelContext.save()
+//                            print("Successfully added default dateStamp.")
+//                        } catch {
+//                            print("Failed to save dateStamp: \(error.localizedDescription)")
+//                        }
+//                    }
+//                }
+//            }
+//        }
     // MARK: - 헤더 뷰
     private var headerView: some View {
         VStack {
@@ -95,9 +95,9 @@ struct CalenderBodyView: View {
                     } else {
                         let date = getDate(for: index - firstWeekday)
 //                        let day = index - firstWeekday + 1
-                        let clicked = (clickedDate != nil) ? true : false
+                        let _ = (clickedDate != nil) ? true : false
                         let completedRatio = completedRatio(user, groupMission, date)
-                        CellView(date: date, clicked: clicked, clickedDate: clickedDate, groupColor: groupColor, completedRatio: completedRatio)
+                        CellView(date, clickedDate, groupColor, completedRatio, groupMission, user)
                             .onTapGesture {
                                 if clickedDate != nil {
                                     clickedDate = (clickedDate == date) ? nil : date
@@ -139,8 +139,6 @@ struct CalenderBodyView: View {
             return dateMissionCount > 0 ? (completedCount / dateMissionCount) : 0.0
         }
     
-
-    
 //    private func completedCount (_ missions: [Mission], _ date: Date) -> Int {
 //            var count = 0
 //            for mission in missions {
@@ -166,30 +164,32 @@ struct CalenderBodyView: View {
 // MARK: - 일자 셀 뷰
 private struct CellView: View {
     var date: Date
-    var clicked: Bool = false
     var clickedDate: Date?
     var groupColor: Color
     var completedRatio : Double
+    var mission : [Mission]
+    var user : User
     
-    init(date: Date, clicked: Bool, clickedDate: Date?, groupColor: Color, completedRatio : Double) {
+    init(_ date: Date, _ clickedDate: Date?, _ groupColor: Color, _ completedRatio : Double, _ mission: [Mission], _ user: User) {
         self.date = date
-        self.clicked = clicked
         self.clickedDate = clickedDate
         self.groupColor = groupColor
         self.completedRatio = completedRatio
+        self.mission = mission
+        self.user = user
     }
     
     var body: some View {
         VStack {
             if clickedDate != nil {
                 if clickedDate != date && !date.isSameDate(date: Date.now)  {
-                    NumberView(date: date, colorFore: .gray, colorBack: .clear, completedRatio: completedRatio)
+                    NumberView(date: date, colorFore: .gray, colorBack: .clear, completedRatio: completedRatio, mission: mission, user: user)
                 } else if clickedDate != date && date.isSameDate(date: Date.now) {
-                    NumberView(date: date, colorFore: .gray, colorBack: .gray, completedRatio: completedRatio)
-                }else { NumberView(date: date, colorFore: groupColor, colorBack: groupColor, completedRatio: completedRatio) }
+                    NumberView(date: date, colorFore: .gray, colorBack: .gray, completedRatio: completedRatio, mission: mission, user: user)
+                }else { NumberView(date: date, colorFore: groupColor, colorBack: groupColor, completedRatio: completedRatio, mission: mission, user: user) }
             } else {
-                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray, completedRatio: completedRatio) }
-                else { NumberView(date: date, colorFore: .gray, colorBack: .clear, completedRatio: completedRatio) }
+                if date.isSameDate(date: Date.now) { NumberView(date: date, colorFore: .gray, colorBack: .gray, completedRatio: completedRatio, mission: mission, user: user) }
+                else { NumberView(date: date, colorFore: .gray, colorBack: .clear, completedRatio: completedRatio, mission: mission, user: user) }
             }
         }
     }
@@ -200,11 +200,15 @@ private struct NumberView: View {
     var colorFore : Color
     var colorBack : Color
     var completedRatio : Double
-    init(date: Date, colorFore: Color, colorBack: Color, completedRatio : Double) {
+    var mission : [Mission]
+    var user : User
+    init(date: Date, colorFore: Color, colorBack: Color, completedRatio : Double, mission: [Mission], user: User) {
         self.date = date
         self.colorFore = colorFore
         self.colorBack = colorBack
         self.completedRatio = completedRatio
+        self.mission = mission
+        self.user = user
     }
     var body: some View {
         VStack{
@@ -217,20 +221,21 @@ private struct NumberView: View {
                         .day()
                 )))
                 .foregroundColor(colorFore)
-            if completedRatio == 1 {
-                            Circle()
-                                .fill(Color.blue)
-                                .frame(width: 8, height: 8)
-                        } else if completedRatio == 0 {
-                            Circle()
-                                .fill(Color.gray.opacity(0.4))
-                                .frame(width: 8, height: 8)
-                        } else {
-                            Circle()
-                                .fill(Color.red.opacity(completedRatio))
-                                .frame(width: 8, height: 8)
-                        }
-            
+            if mission.first(where: { $0.userStamp?.first(where: { $0.userId == user.id && $0.dateStamp.first(where: { $0.date.onlyDate == date.onlyDate }) != nil })  != nil}) != nil  {
+                if completedRatio == 1 {
+                    Circle()
+                        .fill(Color.blue)
+                        .frame(width: 8, height: 8)
+                } else if completedRatio == 0 {
+                    Circle()
+                        .fill(Color.gray.opacity(0.4))
+                        .frame(width: 8, height: 8)
+                } else {
+                    Circle()
+                        .fill(Color.red.opacity(completedRatio))
+                        .frame(width: 8, height: 8)
+                }
+            }
         }
     }
 }
