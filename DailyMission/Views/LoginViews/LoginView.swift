@@ -68,7 +68,7 @@ struct LoginView: View {
                     // 소셜 로그인 버튼 섹션
                     VStack(spacing: 13) {
                         // 카카오 로그인 버튼
-                        NavigationLink(destination: ContentView()) {
+                        NavigationLink(destination: EmptyView()) {
                             HStack {
                                 Image("kakaoLogo")
                                     .resizable()
@@ -84,9 +84,10 @@ struct LoginView: View {
                         }
                         .frame(height: 50)
                         .padding(.horizontal, 50)
+                        .disabled(true)
                         
                         // Google 로그인 버튼
-                        NavigationLink(destination: ContentView()) {
+                        NavigationLink(destination: EmptyView()) {
                             HStack {
                                 Image("googleLogo")
                                     .resizable()
@@ -106,9 +107,10 @@ struct LoginView: View {
                         }
                         .frame(height: 50)
                         .padding(.horizontal, 50)
+                        .disabled(true)
                         
                         // Apple 로그인 버튼
-                        NavigationLink(destination: ContentView()) {
+                        NavigationLink(destination: EmptyView()) {
                             HStack {
                                 Image(systemName: "applelogo")
                                     .resizable()
@@ -124,9 +126,10 @@ struct LoginView: View {
                         }
                         .frame(height: 50)
                         .padding(.horizontal, 50)
+                        .disabled(true)
                         
                         // Facebook 로그인 버튼
-                        NavigationLink(destination: ContentView()) {
+                        NavigationLink(destination: EmptyView()) {
                             HStack {
                                 Image("facebookLogo")
                                     .resizable()
@@ -146,6 +149,7 @@ struct LoginView: View {
                         }
                         .frame(height: 50)
                         .padding(.horizontal, 50)
+                        .disabled(true)
                     }
                     .padding(.bottom, 20)
                     
