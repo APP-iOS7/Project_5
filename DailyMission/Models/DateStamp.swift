@@ -12,6 +12,7 @@ import SwiftData
 final class DateStamp {
     var date: Date
     var isCompleted: Bool
+    
     init(date: Date, isCompleted: Bool = false) {
         self.date = date
         self.isCompleted = isCompleted

@@ -55,15 +55,14 @@ struct ChartView: View {
             if let members = group.members, !members.isEmpty {
                 HStack {
                     //Text("\(selectedMonth)월")
-                    HStack(alignment: .bottom, spacing: 20) {
+                    HStack(alignment: .bottom, spacing: 10) {
                         let sortedMemberRatios = memberRatios.sorted { $0.ratio > $1.ratio }
-                        let barWidth = (UIScreen.main.bounds.width - 80) / CGFloat(sortedMemberRatios.count)
                         ForEach(sortedMemberRatios.indices, id: \.self) { i in
                             VStack {
                                 
                                 Rectangle()
                                     .fill(groupColor)
-                                    .frame(width: barWidth,
+                                    .frame(width: (UIScreen.main.bounds.width - 40) / CGFloat(sortedMemberRatios.count),
                                            height: CGFloat(sortedMemberRatios[i].ratio) * 2)
                                 
                                 Text(sortedMemberRatios[i].id)
@@ -74,7 +73,7 @@ struct ChartView: View {
                             }
                         }
                     }
-                    .frame(width: UIScreen.main.bounds.width - 40)
+                    .frame(width: UIScreen.main.bounds.width)
                 }
                 
                 
