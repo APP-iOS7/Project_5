@@ -18,9 +18,9 @@ final class Group {
     
     var color: String?
     var dueDate: Date?
-    var createdAt: Date
+    var createdAt: Date  = Date()
     
-    init(name: String, missionTitle: [Mission]? = [], members: [User], category: String,  color: String?, dueDate: Date?, _ createdAt: Date = Date()) {
+    init(name: String, missionTitle: [Mission]?, members: [User], category: String,  color: String?, dueDate: Date?, _ createdAt: Date) {
         self.name = name
         self.missionTitle = missionTitle
         self.members = members

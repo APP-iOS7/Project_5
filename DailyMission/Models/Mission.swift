@@ -12,14 +12,14 @@ import SwiftData
 final class Mission {
     var title: String
     var icon: String?
-    var endDate: Date?
-    var createdAt: Date // mission 생성 날짜
-    var dateStamp: [DateStamp]? // 날짜 : 날짜별 완료 여부를 표시
+    var endDate: Date? 
+    var createdAt: Date  = Date() // mission 생성 날짜
+    var userStamp: [UserStamp]? = [] // 날짜 : 날짜별 완료 여부를 표시
     var group: Group?
     
     init(
         title: String,
-        dateStamp: [DateStamp] = [],
+        userStamp: [UserStamp],
         endDate: Date? = nil,
         icon: String? = nil,
         _ createdAt: Date = Date(),
@@ -27,7 +27,7 @@ final class Mission {
     ) {
         self.title = title
         self.createdAt = createdAt
-        self.dateStamp = dateStamp
+        self.userStamp = userStamp
         self.endDate = endDate
                 self.icon = icon
         self.group = group
