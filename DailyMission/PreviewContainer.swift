@@ -148,7 +148,7 @@ class PreviewContainer {
         
         let missions: [Mission] = [
             // 스터디 그룹
-            Mission(title: "Swift 공부하기",
+            Mission(title: "30분 Swift 공부하기",
                     userStamp: groups[0].groupUsers.map { userGroup in
                         let userStamp = UserStamp(userId: userGroup.user.id, dateStamp: [DateStamp(date: today, isCompleted: false)])
                             return userStamp
@@ -157,7 +157,7 @@ class PreviewContainer {
                     icon: missionIcons[0],
                     group: groups[0]),
             
-            Mission(title: "알고리즘 문제 풀기",
+            Mission(title: "알고리즘 문제 1개 풀기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -168,7 +168,7 @@ class PreviewContainer {
                     icon: missionIcons[1],
                     group: groups[0]),
             
-            Mission(title: "코딩 테스트 연습",
+            Mission(title: "1시간 코딩 연습",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -180,7 +180,7 @@ class PreviewContainer {
                     group: groups[0]),
             
             // 운동 그룹
-            Mission(title: "헬스장 가기",
+            Mission(title: "30분 운동하기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -191,7 +191,7 @@ class PreviewContainer {
                     icon: missionIcons[3],
                     group: groups[1]),
             
-            Mission(title: "달리기 5km",
+            Mission(title: "10,000보 걷기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -202,7 +202,7 @@ class PreviewContainer {
                     icon: missionIcons[4],
                     group: groups[1]),
             
-            Mission(title: "팔굽혀펴기 100개",
+            Mission(title: "팔굽혀펴기 50개",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -224,7 +224,7 @@ class PreviewContainer {
                     icon: missionIcons[6],
                     group: groups[2]),
             
-            Mission(title: "비행기표 예매",
+            Mission(title: "새로운 여행 스팟 발견",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -235,7 +235,7 @@ class PreviewContainer {
                     icon: missionIcons[7],
                     group: groups[2]),
             
-            Mission(title: "숙소 예약",
+            Mission(title: "하루 10분 여행 정보 찾기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -247,7 +247,7 @@ class PreviewContainer {
                     group: groups[2]),
             
             // 독서 모임
-            Mission(title: "이달의 책 선정",
+            Mission(title: "10페이지 이상 독서하기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -258,7 +258,7 @@ class PreviewContainer {
                     icon: missionIcons[9],
                     group: groups[3]),
             
-            Mission(title: "책 읽기 목표 설정",
+            Mission(title: "하루 독서 기록 남기기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -269,7 +269,7 @@ class PreviewContainer {
                     icon: missionIcons[10],
                     group: groups[3]),
             
-            Mission(title: "독후감 공유",
+            Mission(title: "오늘의 한 구절 공유",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -281,7 +281,7 @@ class PreviewContainer {
                     group: groups[3]),
             
             // 요리 연구회
-            Mission(title: "이번 주 요리 주제 정하기",
+            Mission(title: "하루 한 가지 요리하기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -292,7 +292,7 @@ class PreviewContainer {
                     icon: missionIcons[12],
                     group: groups[4]),
             
-            Mission(title: "레시피 연구하기",
+            Mission(title: "레시피 1개 연구하기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -303,7 +303,7 @@ class PreviewContainer {
                     icon: missionIcons[13],
                     group: groups[4]),
             
-            Mission(title: "팀별 요리 대회 개최",
+            Mission(title: "팀별 요리 대회 연습",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -315,7 +315,7 @@ class PreviewContainer {
                     group: groups[4]),
             
             // 프로그래밍 동아리
-            Mission(title: "오픈소스 프로젝트 기여",
+            Mission(title: "하루 한 개의 오픈소스 기여하기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -326,7 +326,7 @@ class PreviewContainer {
                     icon: missionIcons[12],
                     group: groups[5]),
             
-            Mission(title: "새로운 언어 배우기",
+            Mission(title: "하루 한 개의 Swift 챌린지 해결하기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -349,7 +349,7 @@ class PreviewContainer {
                     group: groups[5]),
             
             // 영화 감상회
-            Mission(title: "이번 달 영화 선정",
+            Mission(title: "오늘 본 영화나 드라마 기록",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -360,7 +360,7 @@ class PreviewContainer {
                     icon: missionIcons[12],
                     group: groups[6]),
             
-            Mission(title: "감상문 작성",
+            Mission(title: "영화 명대사 1개 정리",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -371,7 +371,7 @@ class PreviewContainer {
                     icon: missionIcons[12],
                     group: groups[6]),
             
-            Mission(title: "영화 토론회 개최",
+            Mission(title: "영화 토론회 연습",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -383,7 +383,7 @@ class PreviewContainer {
                     group: groups[6]),
             
             // 사진 촬영 모임
-            Mission(title: "촬영 테마 정하기",
+            Mission(title: "하루 한 장 사진 찍기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -394,7 +394,7 @@ class PreviewContainer {
                     icon: missionIcons[12],
                     group: groups[7]),
             
-            Mission(title: "야외 촬영 일정 조율",
+            Mission(title: "하루 한 장 사진 공유",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
@@ -405,7 +405,7 @@ class PreviewContainer {
                     icon: missionIcons[12],
                     group: groups[7]),
             
-            Mission(title: "사진 편집 워크숍 개최",
+            Mission(title: "사진 편집 연습하기",
                     userStamp: groups[0].groupUsers.map {
                         let userStamp = UserStamp(userId: $0.user.id)
                         userStamp.dateStamp.append(DateStamp(date: today, isCompleted: false))
