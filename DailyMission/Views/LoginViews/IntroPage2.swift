@@ -16,22 +16,17 @@ struct IntroPage2: View {
         VStack {
             Spacer()
             
-            Image("ContentView")
+            Image("intro_2")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 300, height: 450)
+                .frame(width: 300, height: 530)
                 .clipShape(RoundedRectangle(cornerRadius: 40))
                 .shadow(radius: 10)
-                .offset(x: 30)
-            //                .resizable()
-            //                .aspectRatio(contentMode: .fit)
-            //                .padding(EdgeInsets(top: 0, leading: 30, bottom: 30, trailing: 30))
-            
-            Spacer()
-            
+
             Text(string)
                 .font(.title)
                 .fontWeight(.semibold)
+                .padding(.vertical, 10)
             
             Spacer()
         }
