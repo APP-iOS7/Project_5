@@ -21,7 +21,7 @@ struct MainView: View {
         //print("로그인한 사용자: \(user.id), 속한 그룹 개수: \(user.groups.count)")
         return user.groups
     }
-    
+    @State private var searchText: String = ""
     @State private var showAddGroup: Bool = false
     @State private var isEditMode: Bool = false
     @State private var showGroupInfo: Bool = false
@@ -40,10 +40,20 @@ struct MainView: View {
         "brown": .brown
     ]
     let iconSize: CGFloat = 30
-    
+    var filteredGroups: [Group] {
+        if searchText.isEmpty {
+            return []
+        } else {
+            return allgroups.filter { group in
+                group.name.localizedCaseInsensitiveContains(searchText) ||
+                group.category.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
     var body: some View {
         NavigationStack {
             VStack(alignment:.leading) {
+                
                 LazyVGrid(columns: columns, spacing: 15) {
                     ForEach(usergroups, id: \.self) { group in
                         userlistButton(group: group)
@@ -55,16 +65,32 @@ struct MainView: View {
                 Text("더 많은 그룹 구경하기")
                     .font(.headline)
                     .fontWeight(.bold)
-                LazyVGrid(columns: columns, spacing: 15) {
-                    
-                    ForEach(allgroups, id: \.self) { group in
-                        
-                        if !usergroups.contains(group) {
-                            otherlistButton(group: group)
+                SearchBar(text: $searchText)
+                if !searchText.isEmpty {
+                    LazyVGrid(columns: columns, spacing: 15) {
+                        ForEach(filteredGroups, id: \.self) { group in
+                            
+                            if !usergroups.contains(group) {
+                                otherlistButton(group: group)
+                            }
                         }
                     }
-                    .onDelete(perform: deleteGroup)
+                    .listStyle(.plain)
+                    .cornerRadius(12)
+                } else {
+                    LazyVGrid(columns: columns, spacing: 15) {
+                        
+                        ForEach(allgroups, id: \.self) { group in
+                            
+                            if !usergroups.contains(group) {
+                                otherlistButton(group: group)
+                            }
+                        }
+                        .onDelete(perform: deleteGroup)
+                    }
                 }
+                    
+                
                 
             }
         }
@@ -103,7 +129,7 @@ struct MainView: View {
                         .font(.system(size: 16))
                     Spacer()
                     if let dueDate = group.dueDate {
-                        Text(calculateDDay(from: dueDate)) // ✅ D-Day 형식으로 출력
+                        Text(calculateDDay(from: dueDate))
                             .foregroundColor(colorMap[group.color ?? "blue"] ?? .blue)
                             .font(.system(size: 16))
                     }
@@ -182,7 +208,24 @@ struct MainView: View {
     }
     
 }
+struct SearchBar: View {
+    @Binding var text: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            
+            TextField("검색", text: $text)
+                .foregroundColor(.primary)
+            
 
+        }
+        .padding(10)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemGray5)))
+        
+    }
+}
 //#Preview {
 //    ContentView()
 //        .modelContainer(for: Group.self, inMemory: true)
