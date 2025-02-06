@@ -98,7 +98,7 @@ struct CalenderBodyView: View {
     private func completedCount (_ missions: [Mission], _ date: Date) -> Int {
         var count = 0
         for mission in missions {
-            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
+            if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
                 count += 1
             }
         }
@@ -108,7 +108,7 @@ struct CalenderBodyView: View {
     private func dateMissionCount (_ missions: [Mission], _ date: Date) -> Int {
         var count = 0
         for mission in missions {
-            if let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
+            if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
                 count += 1
             }
         }
