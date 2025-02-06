@@ -18,10 +18,11 @@ struct OtherGroupView: View {
         guard let user = users.first(where: { $0.id == loggedInUser }) else {
             return []
         }
-        return user.groups
+        return user.userGroups.map { $0.group }
     }
     
     var selectedgroup : Group
+    var user : User
     @Query private var missions: [Mission]
     var filteredMissions: [Mission] {
         missions.filter { $0.group?.id == selectedgroup.id }
@@ -89,6 +90,7 @@ struct OtherGroupView: View {
                 Spacer()
                 Button(action: {
                     joinGroup()
+                    dismiss()
                 }) {
                     Text(isJoined ? "이미 참여한 그룹입니다" : "그룹 참여")
                         .frame(maxWidth: .infinity)
@@ -118,21 +120,17 @@ struct OtherGroupView: View {
     }
     private func checkIfJoined() {
         if let user = users.first(where: { $0.id == loggedInUser }) {
-            isJoined = user.groups.contains(where: { $0.id == selectedgroup.id })
+            let userGroups = user.userGroups.map { $0.group }
+            isJoined = userGroups.contains(where: { $0.id == selectedgroup.id })
         }
     }
-    
     private func joinGroup() {
-        if let user = users.first(where: { $0.id == loggedInUser }) {
-            if !user.groups.contains(where: { $0.id == selectedgroup.id }) {
-                user.groups.append(selectedgroup)
-                if selectedgroup.members == nil {
-                    selectedgroup.members = []
-                }
-                selectedgroup.members?.append(user)
-                try? modelContext.save()
-                isJoined = true
-            }
+        if !user.userGroups.contains(where: { $0.group.id == selectedgroup.id }) {
+            let newUserGroup = UserGroup(user: user, group: selectedgroup)
+            modelContext.insert(newUserGroup)
+            
+            try? modelContext.save()
+            isJoined = true
         }
     }
     func formattedDate(_ date: Date) -> String {

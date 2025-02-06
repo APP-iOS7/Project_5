@@ -14,8 +14,12 @@ struct MainView: View {
     @AppStorage("loginMember") var loggedInUser: String?
     @Query private var allgroups: [Group]
     var user : User
+    @Query private var userGroups: [UserGroup]
     var usergroups: [Group] {
-        user.groups
+        guard let user = users.first(where: { $0.id == loggedInUser }) else {
+            return []
+        }
+        return user.userGroups.map { $0.group }
     }
     @State private var searchText: String = ""
     @State private var showAddGroup: Bool = false
@@ -116,14 +120,6 @@ struct MainView: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.black)
                 }
-//                if let members = group.members, !members.isEmpty {
-//                    ForEach(members, id: \.id) { mem in
-//                        Text("\(mem.id)") // mem.id가 존재하는지 확인
-//                    }
-//                } else {
-//                    Text("멤버 없음")
-//                        .foregroundColor(.gray)
-//                }
 
                 Spacer()
                 Text(group.name)
@@ -194,8 +190,8 @@ struct MainView: View {
             
         }
         .sheet(item: $selectedGroup) { group in
-                OtherGroupView(selectedgroup: group)
-            }
+            OtherGroupView(selectedgroup: group, user: user)
+        }
     }
     func calculateDDay(from dueDate: Date) -> String {
         let calendar = Calendar.current

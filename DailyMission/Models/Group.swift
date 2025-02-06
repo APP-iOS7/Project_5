@@ -12,17 +12,21 @@ import SwiftData
 final class Group {
     var name: String
     var missionTitle: [Mission]? = []
-    var members: [User]? //그룹원들의 이름 리스트
     var category: String // 카테고리 (운동, 공부 등)
     
     var color: String?
     var dueDate: Date?
     var createdAt: Date  = Date()
+    @Relationship(deleteRule: .cascade, inverse: \UserGroup.group)
+        var groupUsers: [UserGroup] = []
     
-    init(name: String, missionTitle: [Mission]?, members: [User], category: String,  color: String?, dueDate: Date?, createdAt: Date) {
+    var members: [User]? {
+            return groupUsers.map { $0.user }
+        }
+    
+    init(name: String, missionTitle: [Mission]?, category: String,  color: String?, dueDate: Date?, createdAt: Date) {
         self.name = name
         self.missionTitle = missionTitle
-        self.members = members
         self.category = category
         
         self.color = color

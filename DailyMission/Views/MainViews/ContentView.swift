@@ -12,12 +12,17 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query private var users: [User]
+    //@Query private var userGroups: [UserGroup]
     @AppStorage("loginMember") var loggedInUser: String?
     var user: User? {
         users.first(where: { $0.id == loggedInUser })
     }
+    @Query private var userGroups: [UserGroup]
     var usergroups: [Group] {
-        user?.groups ?? []
+        guard let user = users.first(where: { $0.id == loggedInUser }) else {
+            return []
+        }
+        return user.userGroups.map { $0.group }
     }
     
     @State private var showAddGroup: Bool = false
@@ -95,7 +100,7 @@ struct ContentView: View {
     
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Group.self, inMemory: true)
-}
+//#Preview {
+//    ContentView()
+//        .modelContainer(for: Group.self, inMemory: true)
+//}

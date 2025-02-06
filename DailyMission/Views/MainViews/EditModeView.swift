@@ -13,7 +13,7 @@ struct EditModeView: View {
     @Query private var users: [User]
     var user : User
     var usergroups: [Group] {
-        user.groups
+        user.groups!
     }
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
@@ -66,15 +66,10 @@ struct EditModeView: View {
     }
     private func deleteGroup(_ group: Group) {
 
-        if let memberIndex = group.members?.firstIndex(where: { $0.id == user.id }) {
-            group.members?.remove(at: memberIndex)
-        }
-
-        if let groupIndex = user.groups.firstIndex(where: { $0.id == group.id }) {
-            user.groups.remove(at: groupIndex)
-        }
-
-        try? modelContext.save()
+        if let userGroupToRemove = user.userGroups.first(where: { $0.group.id == group.id }) {
+                modelContext.delete(userGroupToRemove)
+                try? modelContext.save()
+            }
     }
 
     
