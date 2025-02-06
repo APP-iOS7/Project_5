@@ -74,16 +74,13 @@ struct EditModeView: View {
             print("로그인한 사용자를 찾을 수 없습니다.")
             return
         }
-        print("🚀 그룹 나가기 요청: \(group.name)")
 
         if let memberIndex = group.members?.firstIndex(where: { $0.id == user.id }) {
             group.members?.remove(at: memberIndex)
-            print("✅ \(user.id)가 \(group.name)에서 제거됨.")
         }
 
         if let groupIndex = user.groups.firstIndex(where: { $0.id == group.id }) {
             user.groups.remove(at: groupIndex)
-            print("✅ \(group.name)이 \(user.id)의 그룹 목록에서 제거됨.")
         }
 
         try? modelContext.save()
@@ -91,7 +88,6 @@ struct EditModeView: View {
 
     
     private func editRow(group: Group) -> some View {
-        print("editRow 실행: \(group.name)")
         return HStack {
             
             

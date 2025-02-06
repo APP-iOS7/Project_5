@@ -19,30 +19,41 @@ struct CalendarView: View {
     }
     var groupColor : Color
     @State var clickedDate: Date? = Date()
+    
+    let missionIcons = [
+        "star", "heart", "flame", "bolt", "leaf",
+        "pencil", "book", "clock", "figure.walk", "bicycle",
+        "gamecontroller", "paintbrush", "camera", "music.note", "flag"
+    ]
     var body: some View {
-            VStack{
-                CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissions, clickedDate: $clickedDate)
-                List {
-                    Section(content: {
-                        ForEach(filteredMissions) { mission in
-                            if let clickedDate = clickedDate, let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
-                                HStack{
-                                    Text("\(mission.title)")
-                                    Spacer()
-                                    Image(systemName: (mission.dateStamp![index].isCompleted) ? "checkmark.square.fill" : "square")
-                                        .onTapGesture {
-                                            mission.dateStamp?[index].isCompleted.toggle()
-                                        }
-                                }
+        VStack{
+            CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissions, clickedDate: $clickedDate)
+            List {
+                Section(content: {
+                    ForEach(filteredMissions) { mission in
+                        if let clickedDate = clickedDate, let index = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) {
+                            HStack{
+                                let missionIcon = missionIcons.contains(mission.icon ?? "") ? mission.icon : "doc"
+                                
+                                Image(systemName: missionIcon!)
+                                    .foregroundColor(groupColor)
+                                    .font(.title2)
+                                Text("\(mission.title)")
+                                Spacer()
+                                Image(systemName: (mission.dateStamp![index].isCompleted) ? "checkmark.square.fill" : "square")
+                                    .onTapGesture {
+                                        mission.dateStamp?[index].isCompleted.toggle()
+                                    }
                             }
                         }
-                    }, header: {
-                        Text("미션")
-                    })
-                }
-                .scrollContentBackground(.hidden)
-                .padding()
+                    }
+                }, header: {
+                    Text("미션")
+                })
             }
+            .scrollContentBackground(.hidden)
+            .padding()
+        }
     }
 }
 
