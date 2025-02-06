@@ -113,7 +113,8 @@ struct MainView: View {
                     
                     Spacer()
                     
-                    Text("\(group.memberCount)")
+                    Text("\(group.members?.count ?? 0)")
+
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundStyle(.black)
@@ -157,7 +158,7 @@ struct MainView: View {
                     
                     Spacer()
                     
-                    Text("\(group.memberCount)")
+                    Text("\(group.members?.count ?? 0)")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundStyle(.black)
@@ -187,7 +188,7 @@ struct MainView: View {
             
         }
         .sheet(item: $selectedGroup) { group in
-                OtherGroupView(group: group)
+                OtherGroupView(selectedgroup: group)
             }
     }
     func calculateDDay(from dueDate: Date) -> String {
