@@ -13,11 +13,11 @@ struct ContentView: View {
     @Environment(\.dismiss) private var dismiss
     @Query private var users: [User]
     @AppStorage("loginMember") var loggedInUser: String?
-    var userGroups: [Group] {
-        if let user = users.first(where: { $0.id == loggedInUser }) {
-            return user.groups
-        }
-        return []
+    var user: User? {
+        users.first(where: { $0.id == loggedInUser })
+    }
+    var usergroups: [Group] {
+        user?.groups ?? []
     }
     
     @State private var showAddGroup: Bool = false
@@ -29,9 +29,9 @@ struct ContentView: View {
                 VStack {
                     
                     if isEditMode == .active {
-                        EditModeView()
+                        EditModeView( user: user ?? User(id: "default", password: "1234"))
                     } else {
-                        MainView()
+                        MainView( user: user ?? User(id: "default", password: "1234"))
                     }
                     Spacer()
                     
@@ -64,7 +64,7 @@ struct ContentView: View {
                         
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if let user = loggedInUser {
+                        if let user = user {
                             Text("\(user) 님 환영합니다.")
                         } else {
                             Text("환영합니다.")

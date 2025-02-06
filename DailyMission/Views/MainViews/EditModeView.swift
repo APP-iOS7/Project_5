@@ -11,14 +11,9 @@ import SwiftData
 struct EditModeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [User]
-    @AppStorage("loginMember") var loggedInUser: String?
+    var user : User
     var usergroups: [Group] {
-        guard let user = users.first(where: { $0.id == loggedInUser }) else {
-            print("로그인한 사용자를 찾을 수 없습니다. 빈 그룹 반환.")
-            return []
-        }
-        print("로그인한 사용자: \(user.id), 속한 그룹 개수: \(user.groups.count)")
-        return user.groups
+        user.groups
     }
     
     let colors: [String] = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]
@@ -70,10 +65,6 @@ struct EditModeView: View {
         
     }
     private func deleteGroup(_ group: Group) {
-        guard let user = users.first(where: { $0.id == loggedInUser }) else {
-            print("로그인한 사용자를 찾을 수 없습니다.")
-            return
-        }
 
         if let memberIndex = group.members?.firstIndex(where: { $0.id == user.id }) {
             group.members?.remove(at: memberIndex)
