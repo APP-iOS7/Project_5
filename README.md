@@ -17,7 +17,13 @@
 - **Framework** : SwiftUI
 
 ---
+## 앱 화면
+![scene1](https://github.com/APP-iOS7/Project_5/blob/dev/scene1.png)
 
+![scene2](https://github.com/APP-iOS7/Project_5/blob/dev/scene2.png) 
+![scene3](https://github.com/APP-iOS7/Project_5/blob/dev/scene3.png)
+
+---
 ## 📌 주요 기능
 - aaa
   - aaa
