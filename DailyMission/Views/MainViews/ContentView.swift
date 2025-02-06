@@ -65,7 +65,7 @@ struct ContentView: View {
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         if let user = user {
-                            Text("\(user) 님 환영합니다.")
+                            Text("\(user.id) 님 환영합니다.")
                         } else {
                             Text("환영합니다.")
                         }
