@@ -72,12 +72,15 @@ struct CalendarView: View {
         DispatchQueue.main.async {
             self.filteredMissionsState = self.missions.filter { $0.group?.id == self.group.id }
             
-            if let clickedDate = self.clickedDate {
-                for mission in self.filteredMissionsState {
-                    if let userStamp = mission.userStamp?.first(where: { $0.userId == self.user.id }) {
-                        if !userStamp.dateStamp.contains(where: { $0.date.isSameDate(date: clickedDate) }) {
+            if let clickedDate = self.clickedDate {//선택된 날짜가 있을때
+                for mission in self.filteredMissionsState { //그룹 미션들 중에서
+                    if let userStamp = mission.userStamp?.first(where: { $0.userId == self.user.id }) { //현재 유저의 유저스탬프가 미션에 존재하면
+                        if !userStamp.dateStamp.contains(where: { $0.date.isSameDate(date: Date.now) }) && //오늘 날짜의 데이트스탬프가 없고
+                            ( ( compareDate(mission.endDate!, Date.now) >= 0  && mission.endDate != nil) || //날짜가 마감일 전일때
+                             ( compareDate(group.dueDate!, Date.now) >= 0  && mission.endDate == nil) )
+                        {
                             print("Adding missing dateStamp for clickedDate: \(clickedDate)")
-                            userStamp.dateStamp.append(DateStamp(date: clickedDate, isCompleted: false))
+                            userStamp.dateStamp.append(DateStamp(date: Date.now, isCompleted: false)) // 유저 데이트스탬프 생성
                             try? self.modelContext.save()
                         }
                     }
@@ -87,7 +90,27 @@ struct CalendarView: View {
             print("Updated filteredMissionsState count: \(self.filteredMissionsState.count)")
         }
     }
-
+//    //미션->유저스탬프->dateStamp 에서 뉴 dateStamp 추가
+//    private func MakeDailyTimeStamp(missions: [Mission]) {
+////        var dateStamp : [DateStamp]
+//        for mission in missions {
+//            if let userStamp = mission.userStamp?.first(where: { $0.userId == self.user.id }) {
+//                if !userStamp.dateStamp.contains(where: { $0.date.isSameDate(date: Date.now) }) {
+//                    print("Adding missing dateStamp for clickedDate: \(Date.now)")
+//                    userStamp.dateStamp.append(DateStamp(date: Date.now, isCompleted: false))
+//                    try? self.modelContext.save()
+//                }
+//            }
+////            if let _ = mission.endDate {
+////                print("\(mission.title)이 \(compareDate(mission.endDate!, Date.now))일 남음")
+////            }
+//        }
+//    }
+//    
+    private func compareDate(_ today : Date, _ endDate : Date) -> Int {
+        return Calendar.current.getDateGap(from: endDate, to: today)
+    }
+    
     private func isMissionCompleted(for mission: Mission) -> Bool {
         guard let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }) else {
             return false
