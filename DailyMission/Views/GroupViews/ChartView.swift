@@ -12,6 +12,7 @@ struct ChartView: View {
     @Environment(\.modelContext) private var modelContext
     var group : Group
     var groupColor : Color
+    var user: User
     @Query private var missions: [Mission]
     var filteredMissions: [Mission] {
         missions.filter { $0.group?.id == group.id }
