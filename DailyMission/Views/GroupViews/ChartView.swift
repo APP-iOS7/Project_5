@@ -43,6 +43,7 @@ struct ChartView: View {
                         }
                     }
                 }
+                .background()
                 
             } else {
                 Text("멤버가 없습니다.")
@@ -91,9 +92,15 @@ struct ChartView: View {
     }
     private func updateGraphData() {
         if let members = group.members {
-            memberRatios = members.map { member in
-                let monthlyRatio = totalMonthlyRatio(member: member, selectedMonth: selectedMonth) * 100
-                return (id: member.id, ratio: monthlyRatio)
+            let rawRatios = members.map { member in
+                (id: member.id, ratio: totalMonthlyRatio(member: member, selectedMonth: selectedMonth) * 100)
+            }
+            
+            let maxRatio = rawRatios.map { $0.ratio }.max() ?? 1
+            
+            memberRatios = rawRatios.map { member in
+                let normalizedRatio = (maxRatio > 0) ? (member.ratio / maxRatio) * 100 : 0
+                return (id: member.id, ratio: normalizedRatio)
             }
         }
     }
