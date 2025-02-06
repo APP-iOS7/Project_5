@@ -20,6 +20,7 @@ struct CalenderBodyView: View {
     @State var offset: CGSize = CGSize()
     @Binding var clickedDate: Date?
     
+    var user : User
     var body: some View {
         
         VStack {
@@ -78,8 +79,7 @@ struct CalenderBodyView: View {
                         let date = getDate(for: index - firstWeekday)
 //                        let day = index - firstWeekday + 1
                         let clicked = (clickedDate != nil) ? true : false
-                        
-                        let completedRatio = Double(completedCount(groupMission, date)) / Double(dateMissionCount(groupMission, date))
+                        let completedRatio = completedRatio(user, groupMission, date)
                         CellView(date: date, clicked: clicked, clickedDate: clickedDate, groupColor: groupColor, completedRatio: completedRatio)
                             .onTapGesture {
                                 if clickedDate != nil {
@@ -95,25 +95,45 @@ struct CalenderBodyView: View {
         }
     }
     
-    private func completedCount (_ missions: [Mission], _ date: Date) -> Int {
-            var count = 0
-            for mission in missions {
-                if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
-                    count += 1
+    private func completedRatio (_ user: User, _ missions: [Mission], _ date: Date) -> Double {
+        var completedCount : Double = 0.0
+        var dateMissionCount : Double = 0.0
+        var dateStamp : [DateStamp]
+        for mission in missions {
+            if let index = mission.userStamp?.firstIndex(where: {$0.userId == user.id}) {
+                dateStamp = mission.userStamp?[index].dateStamp ?? []
+                if let index2 = dateStamp.firstIndex(where: { $0.date.isSameDate(date: date)}) {
+                    dateMissionCount += 1
+                    if dateStamp[index2].isCompleted { completedCount += 1 }
                 }
             }
-            return count
         }
-        
-        private func dateMissionCount (_ missions: [Mission], _ date: Date) -> Int {
-            var count = 0
-            for mission in missions {
-                if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
-                    count += 1
-                }
-            }
-            return count
-        }
+        let completedRatio = completedCount / dateMissionCount
+        return completedRatio
+    }
+    
+
+    
+//    private func completedCount (_ missions: [Mission], _ date: Date) -> Int {
+//            var count = 0
+//            for mission in missions {
+//                if let dateStamp = mission.dateStamp?,
+//                   let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) &&  $0.isCompleted}) {
+//                    count += 1
+//                }
+//            }
+//            return count
+//        }
+//        
+//        private func dateMissionCount (_ missions: [Mission], _ date: Date) -> Int {
+//            var count = 0
+//            for mission in missions {
+//                if let _ = mission.dateStamp?.firstIndex(where: { $0.date.isSameDate(date: date) }) {
+//                    count += 1
+//                }
+//            }
+//            return count
+//        }
 }
 
 // MARK: - 일자 셀 뷰
