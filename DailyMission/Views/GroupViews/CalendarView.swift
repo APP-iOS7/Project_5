@@ -25,39 +25,49 @@ struct CalendarView: View {
         "pencil", "book", "clock", "figure.walk", "bicycle",
         "gamecontroller", "paintbrush", "camera", "music.note", "flag"
     ]
+    let columns = [GridItem(.flexible())]
+    
     var body: some View {
-        VStack{
-            //달력
-            CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissionsState, clickedDate: $clickedDate, user: user)
-            List {
-                Section(header: Text("미션")) {//달력 밑에 클릭된 날짜의 미션 리스트 가져오기
-                        ForEach(filteredMissionsState.sorted(by: { first, second in
-                            let firstCompleted = isMissionCompleted(for: first)
-                            let secondCompleted = isMissionCompleted(for: second)
-                            return firstCompleted == secondCompleted ? first.title < second.title : !firstCompleted
-                        })) { mission in
-                            if let clickedDate = clickedDate,
-                               let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }),//해당 미션-> 유저스탬프에 현재 유저의 스탬프가 존재할 때
-                               let index = userStamp.dateStamp.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) { //현재 클릭한 날과 같은 날의 데이트스탬프의 인덱스가 있다면 가져오기
-                            HStack {
-                                let missionIcon = missionIcons.contains(mission.icon ?? "") ? mission.icon : "doc"
-                                Image(systemName: missionIcon!)
-                                    .foregroundColor(groupColor)
-                                    .frame(minWidth: 30)
-                                Text("\(mission.title)")
-                                Spacer()
-                                    Image(systemName: (userStamp.dateStamp[index].isCompleted) ? "checkmark.square.fill" : "square")
+        VStack (alignment: .leading){
+            ScrollView {
+                CalenderBodyView(group: group, groupColor: groupColor, groupMission: filteredMissionsState, clickedDate: $clickedDate, user: user)
+                LazyVGrid(columns: columns, spacing: 15) {
+                    Section() {//달력 밑에 클릭된 날짜의 미션 리스트 가져오기
+                            ForEach(filteredMissionsState.sorted(by: { first, second in
+                                let firstCompleted = isMissionCompleted(for: first)
+                                let secondCompleted = isMissionCompleted(for: second)
+                                return firstCompleted == secondCompleted ? first.title < second.title : !firstCompleted
+                            })) { mission in
+                                if let clickedDate = clickedDate,
+                                   let userStamp = mission.userStamp?.first(where: { $0.userId == user.id }),//해당 미션-> 유저스탬프에 현재 유저의 스탬프가 존재할 때
+                                   let index = userStamp.dateStamp.firstIndex(where: { $0.date.isSameDate(date: clickedDate) }) { //현재 클릭한 날과 같은 날의 데이트스탬프의 인덱스가 있다면 가져오기
+                                HStack {
+                                    let missionIcon = missionIcons.contains(mission.icon ?? "") ? mission.icon : "doc"
+                                    Image(systemName: missionIcon!)
                                         .foregroundColor(groupColor)
-                                        .onTapGesture {
-                                            toggleMissionCompletion(userStamp: userStamp, index: index)
-                                        }
+                                        .frame(minWidth: 30)
+                                    Text("\(mission.title)")
+                                    Spacer()
+                                        Image(systemName: (userStamp.dateStamp[index].isCompleted) ? "checkmark.square.fill" : "square")
+                                            .foregroundColor(groupColor)
+                                            .onTapGesture {
+                                                toggleMissionCompletion(userStamp: userStamp, index: index)
+                                            }
+                                    }
+                                .padding()
+                                .background(userStamp.dateStamp[index].isCompleted ? groupColor.opacity(0.3) : Color.white)
+                                .cornerRadius(10)
                                 }
-                                    .padding(.vertical, 5)
+                                
                             }
-                        }
+                            
+                    }
                 }
+                .scrollContentBackground(.hidden)
+                Spacer()
             }
-            .scrollContentBackground(.hidden)
+            //달력
+            
         }
         .onAppear {
             updateFilteredMissions()
