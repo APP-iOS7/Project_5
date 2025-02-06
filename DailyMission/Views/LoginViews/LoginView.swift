@@ -10,19 +10,20 @@ import SwiftData
 
 struct LoginView: View {
     
-    let members = ["minseo" : "1234", "hajin" : "1234", "junho" : "1234"]
+//    let members = ["minseo" : "1234", "hajin" : "1234", "junho" : "1234"]
     @AppStorage("loginMember") var member: String?
     
     @Environment(\.modelContext) private var modelContext
-    @Query private var missions: [Mission]
+    @Query private var users: [User]
     
     @State private var userId: String = ""
     @State private var password: String = ""
-    @State private var loggedInUser: User?
-    @State private var newMissionTitle: String = ""
+//    @State private var loggedInUser: User?
+//    @State private var newMissionTitle: String = ""
     @State private var isLoggedIn: Bool = false
     @State private var showAlert_wrong = false
     @State private var showAlert_blank = false
+    @State private var isJoinRequested = false
     
     var body: some View {
         ZStack {
@@ -59,6 +60,20 @@ struct LoginView: View {
                             .padding(.horizontal, 50)
                     }
                     NavigationLink(destination: ContentView(), isActive: $isLoggedIn) {
+                        EmptyView()
+                    }
+                    
+                    Button {
+                        isJoinRequested.toggle()
+                    } label: {
+                        Text("회 원   가 입")
+                            .font(.custom("Pretendard-Regular", size: 16))
+                            .foregroundColor(.orange)
+                            .underline()
+                            .padding(.top, 25)
+                            .padding(.horizontal, 50)
+                    }
+                    NavigationLink(destination: JoinView(), isActive: $isJoinRequested) {
                         EmptyView()
                     }
                     
@@ -186,13 +201,14 @@ struct LoginView: View {
         }
         else {
             
-            if let storedPassword = members[userId], storedPassword == password {
-                loggedInUser = User(id: userId, password: storedPassword)
+            if let user = users.first(where: { $0.id == userId && $0.password == password }) {
+                // 로그인 성공
                 member = userId
                 isLoggedIn = true
                 userId = ""
                 password = ""
-            } else {
+            }
+            else {
                 showAlert_wrong.toggle()
                 print("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.")
             }
