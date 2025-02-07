@@ -10,10 +10,10 @@ import SwiftData
 
 @Model
 final class UserGroup {
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var user: User
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var group: Group
 
     init(user: User, group: Group) {

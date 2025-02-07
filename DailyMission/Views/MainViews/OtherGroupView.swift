@@ -129,8 +129,17 @@ struct OtherGroupView: View {
             let newUserGroup = UserGroup(user: user, group: selectedgroup)
             modelContext.insert(newUserGroup)
             
-            try? modelContext.save()
-            isJoined = true
+            do {
+                    try modelContext.save()
+                    isJoined = true
+                    print("Successfully joined group!")
+                    print("User ID: \(user.id)")
+                    print("Group Name: \(selectedgroup.name)")
+                } catch {
+                    print("Error saving userGroup: \(error.localizedDescription)")
+                }
+            
+
         }
     }
     func formattedDate(_ date: Date) -> String {

@@ -16,7 +16,7 @@ struct DailyMissionApp: App {
     var sharedModelContainer: ModelContainer = {
         do {
             return try ModelContainer(
-                for: Mission.self, Group.self
+                for: User.self, Group.self, Mission.self, DateStamp.self, UserStamp.self ,UserGroup.self
             )
         } catch {
             fatalError("Could not create ModelContainer: \(error)")

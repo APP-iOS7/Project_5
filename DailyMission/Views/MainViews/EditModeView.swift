@@ -14,9 +14,6 @@ struct EditModeView: View {
     var user : User
     @Query private var userGroups: [UserGroup]
     var usergroups: [Group] {
-        guard let user = users.first(where: { $0.id == user.id }) else {
-            return []
-        }
         return user.userGroups.map { $0.group }
     }
     
@@ -31,7 +28,6 @@ struct EditModeView: View {
         "brown": .brown
     ]
     let iconSize: CGFloat = 30
-    let minusSize: CGFloat = 23
     
     @State private var showDeleteAlert = false
     @State private var groupToDelete: Group?
@@ -55,6 +51,7 @@ struct EditModeView: View {
                     
                 }
             }
+            .navigationTitle("그룹 관리")
         }
         .alert("그룹을 나가시겠습니까?", isPresented: $showDeleteAlert) {
             Button("취소", role: .cancel) { }
@@ -69,12 +66,23 @@ struct EditModeView: View {
         
     }
     private func deleteGroup(_ group: Group) {
+        guard let userGroupToRemove = user.userGroups.first(where: { $0.group.id == group.id }) else {
+            print("❌ No matching group found in user's groups")
+            return
+        }
 
-        if let userGroupToRemove = user.userGroups.first(where: { $0.group.id == group.id }) {
-                modelContext.delete(userGroupToRemove)
-                try? modelContext.save()
-            }
+        print("✅ Found matching userGroup, attempting to delete...")
+
+        do {
+                    modelContext.delete(userGroupToRemove)
+                    try modelContext.save()
+                    print("✅ Successfully removed user from group")
+                } catch {
+                    print("❌ Error deleting group: \(error.localizedDescription)")
+                }
     }
+
+
 
     
     private func editRow(group: Group) -> some View {
@@ -103,8 +111,7 @@ struct EditModeView: View {
                     .font(.system(size: 18))
             }
             .buttonStyle(PlainButtonStyle())
-            .contentShape(Rectangle())
-            
+            .padding(.trailing, 10)
         }
         .listRowBackground(Color.white)
     }
