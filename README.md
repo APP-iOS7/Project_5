@@ -17,25 +17,17 @@
 - **Framework** : SwiftUI
 
 ---
-## 앱 화면
+## 📌 앱 화면 및 주요 기능
 ![scene1](https://github.com/APP-iOS7/Project_5/blob/dev/scene1.png)
-
-![scene2](https://github.com/APP-iOS7/Project_5/blob/dev/scene2.png) 
+- 메인화면에서 [내가 등록된 그룹] 과 [기타 그룹] 을 GridView 로 보여줌
+- 그룹을 직접 생성하여, 참여자들과 함께 성취도를 모니터링해 나갈 수 있음
+ 
+![scene2](https://github.com/APP-iOS7/Project_5/blob/dev/scene2.png)
+- 날짜별로 미션을 정하여 관리할 수 있음
+- 성취하고싶은 미션을 등록하여 동기부여
+ 
 ![scene3](https://github.com/APP-iOS7/Project_5/blob/dev/scene3.png)
-
----
-## 📌 주요 기능
-- aaa
-  - aaa
-  - aaa
-
-- bbb
-   - bbb
-   - bbb
-- ccc
-    - ccc
-    - ccc
-    - ccc
+- 나와 그룹원들의 성취도를 개인별로 차트로 보여주어, 경생심 고취 및 동기 부여
       
 ---
 ## Entity 관계도
