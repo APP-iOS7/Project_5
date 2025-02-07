@@ -14,7 +14,7 @@
 ## 💻 개발환경
 - **Language** : Swift
 - **IDE** : Xcode 16.2
-- **Framework** : SwiftUI
+- **Framework** : SwiftUI, SwiftData
 
 ---
 ## 📌 앱 화면 및 주요 기능
