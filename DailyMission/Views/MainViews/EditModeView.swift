@@ -67,7 +67,7 @@ struct EditModeView: View {
     }
     private func deleteGroup(_ group: Group) {
         guard let userGroupToRemove = user.userGroups.first(where: { $0.group.id == group.id }) else {
-            print("❌ No matching group found in user's groups")
+            print("No matching group found in user's groups")
             return
         }
 
@@ -76,9 +76,9 @@ struct EditModeView: View {
         do {
                     modelContext.delete(userGroupToRemove)
                     try modelContext.save()
-                    print("✅ Successfully removed user from group")
+                    print("Successfully removed user from group")
                 } catch {
-                    print("❌ Error deleting group: \(error.localizedDescription)")
+                    print("Error deleting group: \(error.localizedDescription)")
                 }
     }
 

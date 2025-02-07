@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class UserStamp { // ✅ 유저별 DateStamp를 저장하는 개별 모델
+final class UserStamp {
     var userId : String
     @Relationship(deleteRule: .cascade) var dateStamp: [DateStamp] = []
     
