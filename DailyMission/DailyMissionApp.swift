@@ -25,7 +25,7 @@ struct DailyMissionApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if let member = loginMember {
+            if loginMember != nil {
                 ContentView()
             } else {
                 IntroView()
