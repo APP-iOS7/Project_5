@@ -21,7 +21,6 @@ struct JoinView: View {
     
     @State private var loggedInUser: User?
     
-    @State private var isRegistered: Bool = false
     @State private var showAlert_wrong = false
     @State private var showAlert_blank = false
     @State private var showAlert_password_confirm_mismatch = false
@@ -73,9 +72,6 @@ struct JoinView: View {
                             .cornerRadius(100)
                             .padding(.horizontal, 50)
                     }
-                    NavigationLink(destination: ContentView(), isActive: $isRegistered) {
-                        EmptyView()
-                    }
                     
                     Spacer()
                     
@@ -114,7 +110,13 @@ struct JoinView: View {
             Text("이미 사용중인 아이디입니다.")
         })
         .alert("", isPresented: $showAlert_join_success, actions: {
-            Button("확인", role: .cancel) { isRegistered = true /* ContentView 로 이동 */ }
+            Button("확인", role: .cancel) {
+                member = userId     // loginMember 전역변수에 저장
+            
+                userId = ""
+                password = ""
+                password_confirm = ""
+            }
         }, message: {
             Text("축하합니다.\n회원 가입에 성공했습니다.")
         })
@@ -132,7 +134,7 @@ struct JoinView: View {
         }
         else {
             
-            if let user = users.first(where: { $0.id == userId }) { // // 이미 사용중인 id
+            if let _ = users.first(where: { $0.id == userId }) { // // 이미 사용중인 id
                 showAlert_exising_id.toggle()
             }
             else {  // 사용 가능한 id
@@ -140,14 +142,9 @@ struct JoinView: View {
                 // User 테이블에 Insert
                 modelContext.insert(User(id: userId, password: password))
                 
-                // loginMember 전역변수에 저장
-                member = userId
-                
                 // 회원 가입 성공 Alert
                 showAlert_join_success.toggle()
                 
-                userId = ""
-                password = ""
                 
                 print("회원 가입 성공")
             }
